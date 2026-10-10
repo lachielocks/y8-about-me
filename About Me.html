@@ -1,0 +1,3798 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Lachlan Thurlow</title>
+    <link id="favicon" rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>😀</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'media',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#ff914d',
+                        'primary-dark': '#e6823d',
+                        'primary-light': '#ffb380',
+                        'blue-primary': '#1e40af',
+                        'blue-primary-dark': '#1e3a8a',
+                        'blue-primary-light': '#3b82f6'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --primary-color: #ff914d;
+            --primary-dark: #e6823d;
+            --primary-light: #ffb380;
+        }
+        
+        .blue-theme {
+            --primary-color: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        }
+        
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a1a1a 100%);
+        }
+        
+        .dynamic-primary {
+            background-color: var(--primary-color) !important;
+        }
+        
+        .dynamic-primary-text {
+            color: var(--primary-color) !important;
+        }
+        
+        .dynamic-primary-light {
+            background-color: var(--primary-light) !important;
+        }
+        
+        .dynamic-focus-ring:focus {
+            --tw-ring-color: var(--primary-color);
+            ring-color: var(--primary-color);
+        }
+        
+        .section-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 145, 77, 0.2);
+        }
+        
+        .section-card:active {
+            transform: translateY(-2px) scale(0.98);
+            box-shadow: 0 10px 20px rgba(255, 145, 77, 0.3);
+        }
+        
+        .blue-theme .section-card:hover {
+            box-shadow: 0 20px 40px rgba(30, 64, 175, 0.2);
+        }
+        
+        .blue-theme .section-card:active {
+            box-shadow: 0 10px 20px rgba(30, 64, 175, 0.3);
+        }
+        
+        /* Quiz Answer Feedback Animations */
+        .answer-feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            pointer-events: none;
+            font-size: 80px;
+            font-weight: bold;
+            opacity: 0;
+            animation: feedbackPop 1.2s ease-out forwards;
+        }
+        
+        .answer-correct {
+            color: #10b981;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+        
+        .answer-incorrect {
+            color: #ef4444;
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+        
+        @keyframes feedbackPop {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+            15% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            30% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            85% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 60;
+            width: 60px;
+            height: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            padding: 2px;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+        
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+        
+        .toggle-slider {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: white;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dark .toggle-slider {
+            background: #1f2937;
+        }
+        
+        .blue-theme .toggle-slider {
+            transform: translateX(30px);
+        }
+        
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .quiz-blur {
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+        }
+        
+        .quiz-active #quiz {
+            filter: none !important;
+            pointer-events: auto !important;
+            user-select: auto !important;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: #ff914d;
+            animation: confetti-fall 3s linear forwards;
+            pointer-events: none;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+        
+        .confetti:nth-child(odd) {
+            background: #3b82f6;
+            animation-delay: 0.1s;
+        }
+        
+        .confetti:nth-child(3n) {
+            background: #10b981;
+            animation-delay: 0.2s;
+        }
+        
+        .confetti:nth-child(4n) {
+            background: #f59e0b;
+            animation-delay: 0.3s;
+        }
+        
+        .confetti:nth-child(5n) {
+            background: #ef4444;
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(300px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes confetti-fall-fast {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(400px) rotate(1080deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes confetti-side-right {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(400px) translateY(200px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes confetti-side-left {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-400px) translateY(200px) rotate(-720deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes confetti-rise {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-400px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes confetti-diagonal-br {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(300px) translateY(300px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes confetti-diagonal-bl {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-300px) translateY(300px) rotate(-720deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes confetti-diagonal-tr {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(300px) translateY(-300px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes confetti-diagonal-tl {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-300px) translateY(-300px) rotate(-720deg);
+                opacity: 0;
+            }
+        }
+        
+        .big-confetti {
+            position: fixed;
+            width: 25px;
+            height: 25px;
+            z-index: 9999;
+            pointer-events: none;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Hamburger Animation */
+        .menu-open .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .menu-open .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-open .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+        
+        /* Menu Link Stagger Animation */
+        .menu-link {
+            transition: all 0.3s ease;
+        }
+        
+        .menu-open .menu-link {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .menu-open .menu-link:nth-child(1) { transition-delay: 0.1s; }
+        .menu-open .menu-link:nth-child(2) { transition-delay: 0.15s; }
+        .menu-open .menu-link:nth-child(3) { transition-delay: 0.2s; }
+        .menu-open .menu-link:nth-child(4) { transition-delay: 0.25s; }
+        .menu-open .menu-link:nth-child(5) { transition-delay: 0.3s; }
+        .menu-open .menu-link:nth-child(6) { transition-delay: 0.35s; }
+        .menu-open .menu-link:nth-child(7) { transition-delay: 0.4s; }
+        .menu-open .menu-link:nth-child(8) { transition-delay: 0.45s; }
+        .menu-open .menu-link:nth-child(9) { transition-delay: 0.5s; }
+        .menu-open .menu-link:nth-child(10) { transition-delay: 0.55s; }
+        
+        /* Search button positioning */
+        #search-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 60;
+            height: 32px;
+            background: #374151;
+            border: 1px solid #4b5563;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            gap: 8px;
+        }
+        
+        .dark #search-toggle {
+            background: #374151;
+            border-color: #4b5563;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 font-sans">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle bg-gradient-to-r from-orange-500 to-blue-600" onclick="toggleTheme()">
+        <div class="toggle-slider"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="gradient-bg text-white py-32">
+        <div class="container mx-auto px-6 text-center">
+            <div class="w-32 h-32 bg-white rounded-full mx-auto mb-6 flex items-center justify-center shadow-lg">
+                <span class="text-6xl">👋</span>
+            </div>
+            <h1 class="text-5xl font-bold mb-4">Lachlan Thurlow</h1>
+            <p class="text-xl opacity-90 max-w-4xl mx-auto leading-relaxed">Welcome to my personal space! Get to know me better through my journey, interests, and achievements.</p>
+            <p class="text-lg font-bold mt-4 max-w-4xl mx-auto leading-relaxed" style="text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6);">Did you know there's almost 4,000 lines of code to make this website?! (That's a lot of lines of code!)</p>
+        </div>
+    </header>
+
+    <!-- Compact Search Button -->
+    <div id="search-toggle" class="hover:scale-105 active:scale-95">
+        <svg id="search-icon" class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <svg id="close-icon" class="w-4 h-4 text-gray-300 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+        <kbd id="search-toggle-shortcut" class="hidden md:inline text-xs font-semibold text-gray-300 bg-gray-600 px-1.5 py-0.5 rounded">⌘K</kbd>
+    </div>
+
+    <!-- Expanded Search Overlay -->
+    <div id="search-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden transition-opacity duration-300">
+        <div class="flex items-start justify-center pt-20">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden">
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="search-input" 
+                            placeholder="Search my page..." 
+                            class="w-full px-4 py-3 pl-12 pr-20 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent text-gray-800 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 text-lg dynamic-focus-ring"
+                        >
+                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
+                            <button id="clear-search" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hidden">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                            <div class="hidden md:flex items-center gap-1">
+                                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                                <kbd class="px-2 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-600 rounded">Enter</kbd>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Search Results -->
+                <div id="search-results" class="hidden max-h-80 overflow-y-auto">
+                    <!-- Results will be populated here -->
+                </div>
+                
+                <!-- Search Tips -->
+                <div id="search-tips" class="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                        <div class="text-center">
+                            <span>Free food if you search "bonjour" or "pizza."</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 relative">
+            <div class="flex justify-between items-center py-6" style="margin-left: 60px; margin-right: 80px;">
+                <span class="text-lg font-semibold text-gray-800 dark:text-gray-200 truncate">Lachlan Thurlow</span>
+                <button id="menu-button" class="text-gray-700 dark:text-gray-300 hover:dynamic-primary-text focus:outline-none transition-all duration-300 active:scale-90 relative flex-shrink-0">
+                    <div class="hamburger-icon">
+                        <span class="hamburger-line block w-6 h-0.5 bg-current mb-1 transition-all duration-300 origin-center"></span>
+                        <span class="hamburger-line block w-6 h-0.5 bg-current mb-1 transition-all duration-300 origin-center"></span>
+                        <span class="hamburger-line block w-6 h-0.5 bg-current transition-all duration-300 origin-center"></span>
+                    </div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Full Screen Menu Overlay -->
+        <div id="menu-overlay" class="fixed inset-0 bg-white dark:bg-gray-900 z-40 transform translate-x-full transition-transform duration-500 ease-in-out">
+            <!-- Close Button -->
+            <button id="menu-close-button" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-700 dark:text-gray-300 hover:dynamic-primary-text focus:outline-none transition-all duration-300 active:scale-90 z-[60]">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <div class="flex flex-col items-center justify-center h-full space-y-8 opacity-0 transition-opacity duration-500 delay-200" id="menu-content">
+                <a href="#about" class="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-200 transition-all duration-300 nav-link menu-link transform translate-x-8 opacity-0 hover:dynamic-primary-text">About</a>
+                <a href="#school" class="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-200 transition-all duration-300 nav-link menu-link transform translate-x-8 opacity-0 hover:dynamic-primary-text">Education</a>
+                <a href="#interests" class="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-200 transition-all duration-300 nav-link menu-link transform translate-x-8 opacity-0 hover:dynamic-primary-text">Interests</a>
+                <a href="#hobbies" class="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-200 transition-all duration-300 nav-link menu-link transform translate-x-8 opacity-0 hover:dynamic-primary-text">Hobbies</a>
+                <a href="#achievements" class="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-200 transition-all duration-300 nav-link menu-link transform translate-x-8 opacity-0 hover:dynamic-primary-text">Achievements</a>
+                <a href="#company" class="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-200 transition-all duration-300 nav-link menu-link transform translate-x-8 opacity-0 hover:dynamic-primary-text">Transnology</a>
+                <a href="#projects" class="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-200 transition-all duration-300 nav-link menu-link transform translate-x-8 opacity-0 hover:dynamic-primary-text">Projects</a>
+                <a href="#fidgets" class="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-200 transition-all duration-300 nav-link menu-link transform translate-x-8 opacity-0 hover:dynamic-primary-text">Fidgets</a>
+                <a href="#jokes" class="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-200 transition-all duration-300 nav-link menu-link transform translate-x-8 opacity-0 hover:dynamic-primary-text">Jokes</a>
+                <a href="#easter-eggs" class="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-200 transition-all duration-300 nav-link menu-link transform translate-x-8 opacity-0 hover:dynamic-primary-text">Easter Eggs</a>
+                <a href="#quiz" class="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-200 transition-all duration-300 nav-link menu-link transform translate-x-8 opacity-0 hover:dynamic-primary-text">Quiz</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section id="about" class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">About Me</h2>
+                <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-48 h-48 dynamic-primary-light rounded-full flex items-center justify-center text-6xl">
+                            😊
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Hello, I'm Lachlan Thurlow!</h3>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                                I'm a 13 year old boy who loves anything to do with technology and dad jokes. I also tell horrible dad jokes.
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                                If you see a crime at an apple store, <em>does that make you an iWitness?</em>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="school" class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">Education</h2>
+                <div class="section-card bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 dynamic-primary rounded-full flex items-center justify-center text-2xl mr-6">
+                            🎓
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Pittwater House</h3>
+                            <p class="dynamic-primary-text font-medium">Year 8</p>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Favorite Subjects</h4>
+                            <ul class="text-gray-600 dark:text-gray-300 space-y-1">
+                                <li>• Music</li>
+                                <li>• French</li>
+                                <li>• Digital Tech</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Activities</h4>
+                            <ul class="text-gray-600 dark:text-gray-300 space-y-1">
+                                <li>• Band</li>
+                                <li>• Water Polo</li>
+                                <li>• Chess</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interests Section -->
+    <section id="interests" class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">My Interests</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <div class="text-4xl mb-4">💻</div>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">Technology</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Playing with smart home devices and exploring the latest tech innovations</p>
+                    </div>
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <div class="text-4xl mb-4">🌍</div>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">Travel</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Love travelling all across the country and exploring the world</p>
+                    </div>
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <div class="text-4xl mb-4">🎮</div>
+                        <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">Gaming</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Always love gaming and discovering new adventures</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hobbies Section -->
+    <section id="hobbies" class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">Hobbies and Activities</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="section-card bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8">
+                        <div class="flex items-center mb-4">
+                            <span class="text-3xl mr-4">🎵</span>
+                            <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Music</h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300">I play euphonium and piano, expressing myself through different musical styles</p>
+                    </div>
+                    <div class="section-card bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8">
+                        <div class="flex items-center mb-4">
+                            <span class="text-3xl mr-4">🏊‍♂️</span>
+                            <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Water Polo</h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300">Love playing with my team and the competitive spirit of the game</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements" class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">Achievements</h2>
+                <div class="space-y-6">
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex items-center">
+                        <div class="w-16 h-16 dynamic-primary rounded-full flex items-center justify-center text-2xl mr-6">
+                            🏆
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Service To CPPS "Thurlow" Award</h3>
+                            <p class="text-gray-600 dark:text-gray-300">2023 - First and last service award for contributing so much to my primary school</p>
+                        </div>
+                    </div>
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex items-center">
+                        <div class="w-16 h-16 dynamic-primary rounded-full flex items-center justify-center text-2xl mr-6">
+                            🇫🇷
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">French Award - Year 7</h3>
+                            <p class="text-gray-600 dark:text-gray-300">2024 - Best in French in my grade</p>
+                        </div>
+                    </div>
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex items-center">
+                        <div class="w-16 h-16 dynamic-primary rounded-full flex items-center justify-center text-2xl mr-6">
+                            🥉
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">36 Heroic Award Badge</h3>
+                            <p class="text-gray-600 dark:text-gray-300">2025 - Bronze badge for getting 36 heroic awards in a single stage</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Company Section -->
+    <section id="company" class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">My Company</h2>
+                <div class="section-card bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-32 h-32 dynamic-primary rounded-full flex items-center justify-center text-4xl">
+                            👕
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-3xl font-bold mb-4 text-gray-800 dark:text-gray-200">Transnology</h3>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                                My side hustle where I sell t-shirts and other merchandise. I handle everything from design to fulfillment.
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
+                                Running Transnology while balancing school keeps me busy, but I enjoy the creative and business sides of it.
+                            </p>
+                            <a href="https://www.transnology.store?cc=TPHS" target="_blank" class="inline-flex items-center dynamic-primary text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95 shadow-lg">
+                                <span class="mr-2">🛒</span>
+                                Transnology
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-gray-200">Other Projects</h2>
+                <p class="text-center text-gray-600 dark:text-gray-300 mb-12">Check out some of my other web projects and creations!</p>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Hot Chocolate Rankings -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <div class="text-center mb-4">
+                            <div class="w-16 h-16 dynamic-primary rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                                ☕
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">Hot Chocolate Rankings</h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6 text-center">
+                            A website dedicated to ranking the best hot chocolate spots around town. Find your perfect cup!
+                        </p>
+                        <div class="text-center">
+                            <a href="https://hc-ranking.floot.app" target="_blank" class="inline-flex items-center dynamic-primary text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95 shadow-lg">
+                                <span class="mr-2">🌐</span>
+                                Start Ranking
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- OuiBit -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <div class="text-center mb-4">
+                            <div class="w-16 h-16 dynamic-primary rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                                🇫🇷
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">OuiBit</h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6 text-center">
+                            A French learning website to help students practice and improve their French skills with interactive lessons.
+                        </p>
+                        <div class="text-center">
+                            <a href="https://ouibit.floot.app" target="_blank" class="inline-flex items-center dynamic-primary text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95 shadow-lg">
+                                <span class="mr-2">📚</span>
+                                Learn French
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Home -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <div class="text-center mb-4">
+                            <div class="w-16 h-16 dynamic-primary rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                                🏠
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">Home</h3>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6 text-center">
+                            My personal homepage with quick links to school resources and personal projects all in one place.
+                        </p>
+                        <div class="text-center">
+                            <a href="https://thurlow.my.canva.site" target="_blank" class="inline-flex items-center dynamic-primary text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95 shadow-lg">
+                                <span class="mr-2">🔗</span>
+                                Go Home
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fidgets Section -->
+    <section id="fidgets" class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-gray-200">Fidget Playground</h2>
+                <p class="text-center text-gray-600 dark:text-gray-300 mb-12">Click, toggle, slide, and spin to your heart's content! Also, I bet you can't click the clicker fidget more than 30 times.</p>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Toggle Switch -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Toggle Switch</h3>
+                        <div class="flex justify-center mb-4">
+                            <div id="toggle-switch" class="w-16 h-8 bg-gray-300 dark:bg-gray-600 rounded-full cursor-pointer transition-all duration-300 relative">
+                                <div class="toggle-ball w-6 h-6 bg-white rounded-full absolute top-1 left-1 transition-all duration-300 shadow-md"></div>
+                            </div>
+                        </div>
+                        <p id="toggle-status" class="text-sm text-gray-600 dark:text-gray-300">OFF</p>
+                    </div>
+
+                    <!-- Clickable Button -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Click Counter</h3>
+                        <button id="click-button" class="w-20 h-20 dynamic-primary rounded-full text-white font-bold text-xl hover:opacity-90 transition-all active:scale-90 shadow-lg mb-4">
+                            0
+                        </button>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Clicks: <span id="click-count">0</span></p>
+                    </div>
+
+                    <!-- Slider -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Volume Slider</h3>
+                        <div class="mb-4">
+                            <input type="range" id="volume-slider" min="0" max="100" value="50" class="w-full h-2 dynamic-primary rounded-lg appearance-none cursor-pointer">
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Volume: <span id="volume-value">50</span>%</p>
+                    </div>
+
+                    <!-- Spinner Dial -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Spinner Dial</h3>
+                        <div class="flex justify-center mb-4">
+                            <div id="spinner-dial" class="w-20 h-20 dynamic-primary rounded-full cursor-pointer transition-transform duration-300 flex items-center justify-center relative">
+                                <div class="w-1 h-8 bg-white rounded-full absolute"></div>
+                                <div class="w-3 h-3 bg-white rounded-full"></div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Spins: <span id="spin-count">0</span></p>
+                    </div>
+
+                    <!-- Confetti Button -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Confetti Maker</h3>
+                        <div class="flex justify-center mb-4">
+                            <button id="confetti-button" class="w-16 h-16 dynamic-primary rounded-full text-white text-2xl hover:opacity-90 transition-all active:scale-90 shadow-lg">
+                                🎉
+                            </button>
+                        </div>
+                        <p id="confetti-count" class="text-sm text-gray-600 dark:text-gray-300">Celebrations: 0</p>
+                    </div>
+
+                    <!-- Checkbox Grid -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Checkbox Grid</h3>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="checkbox-item w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded cursor-pointer transition-all hover:scale-110 active:scale-95"></div>
+                            <div class="checkbox-item w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded cursor-pointer transition-all hover:scale-110 active:scale-95"></div>
+                            <div class="checkbox-item w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded cursor-pointer transition-all hover:scale-110 active:scale-95"></div>
+                            <div class="checkbox-item w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded cursor-pointer transition-all hover:scale-110 active:scale-95"></div>
+                            <div class="checkbox-item w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded cursor-pointer transition-all hover:scale-110 active:scale-95"></div>
+                            <div class="checkbox-item w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded cursor-pointer transition-all hover:scale-110 active:scale-95"></div>
+                            <div class="checkbox-item w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded cursor-pointer transition-all hover:scale-110 active:scale-95"></div>
+                            <div class="checkbox-item w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded cursor-pointer transition-all hover:scale-110 active:scale-95"></div>
+                            <div class="checkbox-item w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded cursor-pointer transition-all hover:scale-110 active:scale-95"></div>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Checked: <span id="checked-count">0</span>/9</p>
+                    </div>
+
+                    <!-- Pressure Button -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Pressure Button</h3>
+                        <div class="flex justify-center mb-4">
+                            <button id="pressure-button" class="w-20 h-20 bg-red-500 hover:bg-red-600 rounded-full text-white font-bold transition-all active:scale-75 shadow-lg">
+                                PRESS
+                            </button>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                            <div id="pressure-bar" class="bg-red-500 h-2 rounded-full transition-all duration-100" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Number Stepper -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Number Stepper</h3>
+                        <div class="flex items-center justify-center gap-4 mb-4">
+                            <button id="stepper-minus" class="w-10 h-10 dynamic-primary rounded-full text-white font-bold hover:opacity-90 transition-all active:scale-90">-</button>
+                            <span id="stepper-value" class="text-2xl font-bold text-gray-800 dark:text-gray-200 w-12 text-center">0</span>
+                            <button id="stepper-plus" class="w-10 h-10 dynamic-primary rounded-full text-white font-bold hover:opacity-90 transition-all active:scale-90">+</button>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Current: <span id="stepper-display">0</span></p>
+                    </div>
+
+                    <!-- LED Strip -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">LED Strip</h3>
+                        <div class="flex justify-center gap-1 mb-4">
+                            <div class="led w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full transition-all duration-200"></div>
+                            <div class="led w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full transition-all duration-200"></div>
+                            <div class="led w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full transition-all duration-200"></div>
+                            <div class="led w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full transition-all duration-200"></div>
+                            <div class="led w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full transition-all duration-200"></div>
+                            <div class="led w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full transition-all duration-200"></div>
+                            <div class="led w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full transition-all duration-200"></div>
+                            <div class="led w-4 h-4 bg-gray-300 dark:bg-gray-600 rounded-full transition-all duration-200"></div>
+                        </div>
+                        <button id="led-button" class="dynamic-primary text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95">
+                            Animate
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jokes Section -->
+    <section id="jokes" class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-gray-200">Joke Collection</h2>
+                <p class="text-center text-gray-600 dark:text-gray-300 mb-12">Get ready to groan! Here are some of my favorite jokes (warning: they're pretty bad!)</p>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Dad Jokes -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <div class="text-center mb-4">
+                            <div class="text-4xl mb-2">👨‍👧‍👦</div>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Dad Jokes</h3>
+                        </div>
+                        <div class="space-y-4 text-sm">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Why don't scientists trust atoms?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">Because they make up everything!</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">I'm reading a book about anti-gravity.</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">It's impossible to put down!</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Why did the scarecrow win an award?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">He was outstanding in his field!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Knock Knock Jokes -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <div class="text-center mb-4">
+                            <div class="text-4xl mb-2">🚪</div>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Knock Knock</h3>
+                        </div>
+                        <div class="space-y-4 text-sm">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Knock knock!</p>
+                                <p class="text-gray-600 dark:text-gray-300">Who's there?</p>
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Lettuce.</p>
+                                <p class="text-gray-600 dark:text-gray-300">Lettuce who?</p>
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Lettuce in, it's cold out here!</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Knock knock!</p>
+                                <p class="text-gray-600 dark:text-gray-300">Who's there?</p>
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Boo.</p>
+                                <p class="text-gray-600 dark:text-gray-300">Boo who?</p>
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Don't cry, it's just a joke!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech Jokes -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <div class="text-center mb-4">
+                            <div class="text-4xl mb-2">💻</div>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Tech Jokes</h3>
+                        </div>
+                        <div class="space-y-4 text-sm">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Why do programmers prefer dark mode?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">Because light attracts bugs!</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">How many programmers does it take to change a light bulb?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">None. That's a hardware problem!</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Why did the computer go to the doctor?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">Because it had a virus!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Food Jokes -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <div class="text-center mb-4">
+                            <div class="text-4xl mb-2">🍕</div>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Food Jokes</h3>
+                        </div>
+                        <div class="space-y-4 text-sm">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">What do you call a fake noodle?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">An impasta!</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Why don't eggs tell jokes?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">They'd crack each other up!</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">What do you call a sleeping bull?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">A bulldozer!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Animal Jokes -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <div class="text-center mb-4">
+                            <div class="text-4xl mb-2">🐶</div>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Animal Jokes</h3>
+                        </div>
+                        <div class="space-y-4 text-sm">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">What do you call a bear with no teeth?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">A gummy bear!</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Why don't elephants use computers?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">They're afraid of the mouse!</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">What do you call a fish wearing a crown?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">A king fish!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Random Jokes -->
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <div class="text-center mb-4">
+                            <div class="text-4xl mb-2">🎭</div>
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Random Jokes</h3>
+                        </div>
+                        <div class="space-y-4 text-sm">
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Why did the math book look so sad?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">Because it had too many problems!</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">What's the best thing about Switzerland?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">I don't know, but the flag is a big plus!</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                <p class="text-gray-800 dark:text-gray-200 font-medium">Why can't a bicycle stand up by itself?</p>
+                                <p class="text-gray-600 dark:text-gray-300 mt-1">It's two tired!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Joke Generator -->
+                <div class="mt-12 max-w-2xl mx-auto">
+                    <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center">
+                        <h3 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Random Joke Generator</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">Need another laugh? Click the button for a random joke!</p>
+                        
+                        <div id="random-joke-display" class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg mb-6 min-h-[100px] flex items-center justify-center">
+                            <p class="text-gray-500 dark:text-gray-400 italic">Click the button below for a joke!</p>
+                        </div>
+                        
+                        <button id="random-joke-btn" class="dynamic-primary text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95 shadow-lg">
+                            <span class="mr-2">😂</span>
+                            Tell Me a Joke!
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Easter Eggs Section -->
+    <section id="easter-eggs" class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">Easter Eggs</h2>
+                <div class="section-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-48 h-48 dynamic-primary-light rounded-full flex items-center justify-center text-6xl">
+                            🪺
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Did you find them all?</h3>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                                Click and clack, thirty times in a row,<br>
+and watch the site begin to glitch and glow.<br>
+<br>
+Slide with force, too fast, too far,<br>
+and the screen will warp—quite bizarre.<br>
+<br>
+Type a greeting in French, and don't be late,<br>
+a buttery pastry will soon animate.<br>
+<br>
+If you're craving Italian food, here's a tease:<br>
+search the brothers or their favorite cheese.<br>
+<br>
+Tap in the code from the gaming hall,<br>
+↑↑↓↓←→←→BA will unlock it all.<br>
+<br>
+And if you're patient, just wait and see,<br>
+a bouncing DVD may set itself free.<br>
+<br>
+If you type the line that Scott always said,<br>
+he'll pop up laughing: "That's what she said!"<br>
+<br>
+Find all the secrets, and you will see,<br>
+this site has more than what meets the 'www'.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="py-16 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl font-bold mb-8 text-gray-800 dark:text-gray-200">Test Your Knowledge!</h2>
+                <p class="text-gray-600 dark:text-gray-300 mb-8">Think you know me well? Take this 8-question quiz about my page!</p>
+                
+                <div id="quiz-start" class="section-card bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8">
+                    <div class="text-6xl mb-4">🧠</div>
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Ready for the Challenge?</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">Once you start, the page will blur to prevent cheating. Good luck!</p>
+                    <button id="start-quiz-btn" class="dynamic-primary text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95 shadow-lg">
+                        Start Quiz
+                    </button>
+                </div>
+
+                <div id="quiz-container" class="hidden section-card bg-white dark:bg-gray-700 rounded-xl shadow-lg p-8">
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span id="question-counter" class="text-sm font-medium dynamic-primary-text">Question 1 of 5</span>
+                            <span id="score-display" class="text-sm font-medium text-gray-600 dark:text-gray-300">Score: 0/5</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                            <div id="progress-bar" class="dynamic-primary h-2 rounded-full transition-all duration-300" style="width: 20%"></div>
+                        </div>
+                    </div>
+
+                    <div id="question-container">
+                        <h3 id="question-text" class="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-200"></h3>
+                        <div id="answers-container" class="space-y-3">
+                            <!-- Answer buttons will be inserted here -->
+                        </div>
+                    </div>
+
+                    <div id="quiz-result" class="hidden">
+                        <div id="result-emoji" class="text-6xl mb-4"></div>
+                        <h3 id="result-title" class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200"></h3>
+                        <p id="result-message" class="text-gray-600 dark:text-gray-300 mb-6"></p>
+                        <button id="restart-quiz-btn" class="dynamic-primary text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95 shadow-lg">
+                            Done
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 <a href="https://www.transnology.store?cc=TPHS" class="hover:text-gray-300 dark:hover:text-gray-400 font-medium transition-all active:scale-95">Transnology</a>. All rights reserved. Made with ❤️.</p>
+        </div>
+    </footer>
+
+    <script>
+        // "That's what she said" easter egg function
+        function showThatsWhatSheSaidEasterEgg() {
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.9);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                pointer-events: auto;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            
+            // Create image container
+            const imageContainer = document.createElement('div');
+            imageContainer.style.cssText = `
+                max-width: 90vw;
+                max-height: 90vh;
+                position: relative;
+                animation: slideIn 0.5s ease-out;
+            `;
+            
+            // Create the image
+            const image = document.createElement('img');
+            image.src = 'https://i.ytimg.com/vi/8VNJRzNmnb0/maxresdefault.jpg';
+            image.alt = "That's what she said meme";
+            image.style.cssText = `
+                width: 100%;
+                height: auto;
+                border-radius: 15px;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                max-width: 800px;
+                max-height: 80vh;
+                object-fit: contain;
+            `;
+            
+            // Handle image load error
+            image.onerror = function() {
+                this.style.display = 'none';
+                const errorMessage = document.createElement('div');
+                errorMessage.style.cssText = `
+                    color: white;
+                    font-size: 24px;
+                    text-align: center;
+                    padding: 40px;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 15px;
+                    backdrop-filter: blur(10px);
+                `;
+                errorMessage.innerHTML = `
+                    <div style="font-size: 60px; margin-bottom: 20px;">😅</div>
+                    <div>That's what she said!</div>
+                    <div style="font-size: 16px; margin-top: 10px; opacity: 0.8;">Image failed to load</div>
+                `;
+                imageContainer.appendChild(errorMessage);
+            };
+            
+            // Add close button
+            const closeButton = document.createElement('button');
+            closeButton.innerHTML = '×';
+            closeButton.style.cssText = `
+                position: absolute;
+                top: -15px;
+                right: -15px;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.9);
+                border: none;
+                font-size: 24px;
+                font-weight: bold;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #333;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                transition: all 0.2s ease;
+            `;
+            
+            closeButton.addEventListener('mouseover', function() {
+                this.style.background = 'rgba(255, 255, 255, 1)';
+                this.style.transform = 'scale(1.1)';
+            });
+            
+            closeButton.addEventListener('mouseout', function() {
+                this.style.background = 'rgba(255, 255, 255, 0.9)';
+                this.style.transform = 'scale(1)';
+            });
+            
+            // Add animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes slideIn {
+                    from { 
+                        opacity: 0;
+                        transform: scale(0.8) translateY(20px);
+                    }
+                    to { 
+                        opacity: 1;
+                        transform: scale(1) translateY(0);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            imageContainer.appendChild(image);
+            imageContainer.appendChild(closeButton);
+            overlay.appendChild(imageContainer);
+            document.body.appendChild(overlay);
+            
+            // Close handlers
+            const closeOverlay = function() {
+                document.body.removeChild(overlay);
+                document.head.removeChild(style);
+                closeSearch();
+            };
+            
+            closeButton.addEventListener('click', closeOverlay);
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    closeOverlay();
+                }
+            });
+            
+            // Close with escape key
+            const escapeHandler = function(e) {
+                if (e.key === 'Escape') {
+                    closeOverlay();
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
+        }
+
+        // DVD screensaver animation function
+        function showDVDScreensaver() {
+            // Create DVD overlay
+            const dvdOverlay = document.createElement('div');
+            dvdOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: #000000;
+                z-index: 9999;
+                overflow: hidden;
+                pointer-events: auto;
+            `;
+            
+            // Create CD logo
+            const dvdLogo = document.createElement('div');
+            dvdLogo.innerHTML = '💿';
+            dvdLogo.style.cssText = `
+                position: absolute;
+                font-size: 80px;
+                user-select: none;
+                pointer-events: none;
+                filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+                width: 80px;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            dvdOverlay.appendChild(dvdLogo);
+            document.body.appendChild(dvdOverlay);
+            
+            // DVD movement logic with perfect corner hitting
+            const logoWidth = 80;
+            const logoHeight = 80;
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            
+            // Calculate perfect velocities for guaranteed corner hits
+            const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+            const effectiveWidth = screenWidth - logoWidth;
+            const effectiveHeight = screenHeight - logoHeight;
+            const screenGCD = gcd(effectiveWidth, effectiveHeight);
+            
+            // Start from a corner for maximum corner-hitting potential
+            let x = 0;
+            let y = 0;
+            
+            // Use velocities that create perfect mathematical trajectories
+            // These specific ratios ensure the DVD will hit corners more frequently
+            let velocityX = Math.max(1, Math.floor(effectiveWidth / 120));
+            let velocityY = Math.max(1, Math.floor(effectiveHeight / 80));
+            
+            // Ensure velocities are coprime for perfect corner hitting
+            const velocityGCD = gcd(Math.abs(velocityX), Math.abs(velocityY));
+            if (velocityGCD > 1) {
+                velocityX = velocityX / velocityGCD;
+                velocityY = velocityY / velocityGCD;
+            }
+            
+            // Fine-tune for common screen sizes
+            if (effectiveWidth % velocityX === 0 && effectiveHeight % velocityY === 0) {
+                // Perfect! This will definitely hit corners
+                console.log('🎯 Perfect trajectory calculated! Corner hits guaranteed!');
+            }
+            
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff8000', '#8000ff'];
+            let colorIndex = 0;
+            let cornerHits = 0;
+            
+            function animateDVD() {
+                x += velocityX;
+                y += velocityY;
+                
+                // Check for wall collisions with pixel-perfect precision
+                const hitLeftWall = x <= 0;
+                const hitRightWall = x >= screenWidth - logoWidth;
+                const hitTopWall = y <= 0;
+                const hitBottomWall = y >= screenHeight - logoHeight;
+                
+                // Ultra-precise corner hit detection - check exact pixel collision
+                const tolerance = 2; // Allow 2 pixel tolerance for corner hits
+                const isCornerHit = 
+                    (Math.abs(x) <= tolerance || Math.abs(x - (screenWidth - logoWidth)) <= tolerance) && 
+                    (Math.abs(y) <= tolerance || Math.abs(y - (screenHeight - logoHeight)) <= tolerance);
+                
+                if (isCornerHit) {
+                    cornerHits++;
+                    // EPIC corner hit effect!
+                    dvdLogo.style.filter = `drop-shadow(0 0 60px #ffffff) drop-shadow(0 0 120px ${colors[colorIndex]}) hue-rotate(${cornerHits * 90}deg) brightness(2) saturate(3) contrast(1.5)`;
+                    dvdLogo.style.transform = `scale(1.3) rotate(${cornerHits * 45}deg)`;
+                    
+                    // CREATE MASSIVE "CORNER HIT" TEXT
+                    const cornerHitText = document.createElement('div');
+                    cornerHitText.style.cssText = `
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        font-size: 120px;
+                        font-weight: 900;
+                        color: #ffffff;
+                        text-shadow: 
+                            0 0 20px #ff0000,
+                            0 0 40px #00ff00,
+                            0 0 60px #0000ff,
+                            0 0 80px #ffff00,
+                            0 0 100px #ff00ff,
+                            0 0 120px #00ffff;
+                        z-index: 10001;
+                        pointer-events: none;
+                        font-family: 'Arial Black', Arial, sans-serif;
+                        text-align: center;
+                        line-height: 1;
+                        animation: cornerHitPulse 2s ease-out forwards;
+                        letter-spacing: 8px;
+                    `;
+                    cornerHitText.innerHTML = 'CORNER<br>HIT!';
+                    
+                    // Add corner hit animation
+                    const cornerHitStyle = document.createElement('style');
+                    cornerHitStyle.textContent = `
+                        @keyframes cornerHitPulse {
+                            0% {
+                                transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                                opacity: 0;
+                            }
+                            15% {
+                                transform: translate(-50%, -50%) scale(1.5) rotate(5deg);
+                                opacity: 1;
+                            }
+                            30% {
+                                transform: translate(-50%, -50%) scale(1.2) rotate(-3deg);
+                                opacity: 1;
+                            }
+                            45% {
+                                transform: translate(-50%, -50%) scale(1.3) rotate(2deg);
+                                opacity: 1;
+                            }
+                            60% {
+                                transform: translate(-50%, -50%) scale(1.25) rotate(-1deg);
+                                opacity: 1;
+                            }
+                            85% {
+                                transform: translate(-50%, -50%) scale(1.1) rotate(0deg);
+                                opacity: 1;
+                            }
+                            100% {
+                                transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
+                                opacity: 0;
+                            }
+                        }
+                    `;
+                    document.head.appendChild(cornerHitStyle);
+                    dvdOverlay.appendChild(cornerHitText);
+                    
+                    // CREATE DISCO BALL
+                    const discoBall = document.createElement('div');
+                    discoBall.style.cssText = `
+                        position: fixed;
+                        top: 20%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 100px;
+                        height: 100px;
+                        background: radial-gradient(circle at 30% 30%, #ffffff, #cccccc, #999999);
+                        border-radius: 50%;
+                        z-index: 10000;
+                        pointer-events: none;
+                        animation: discoBallSpin 3s linear infinite, discoBallBounce 2s ease-out;
+                        box-shadow: 
+                            0 0 30px rgba(255, 255, 255, 0.8),
+                            inset -10px -10px 20px rgba(0, 0, 0, 0.3),
+                            inset 10px 10px 20px rgba(255, 255, 255, 0.5);
+                    `;
+                    
+                    // Add disco ball pattern
+                    for (let i = 0; i < 20; i++) {
+                        const mirror = document.createElement('div');
+                        const angle = (i * 18) * Math.PI / 180;
+                        const x = 35 + 15 * Math.cos(angle);
+                        const y = 35 + 15 * Math.sin(angle);
+                        
+                        mirror.style.cssText = `
+                            position: absolute;
+                            width: 8px;
+                            height: 8px;
+                            background: linear-gradient(45deg, #ffffff, #cccccc);
+                            border: 1px solid #999999;
+                            left: ${x}px;
+                            top: ${y}px;
+                            transform: rotate(${i * 18}deg);
+                        `;
+                        discoBall.appendChild(mirror);
+                    }
+                    
+                    // Add disco ball animations
+                    const discoBallStyle = document.createElement('style');
+                    discoBallStyle.textContent = `
+                        @keyframes discoBallSpin {
+                            0% { transform: translate(-50%, -50%) rotate(0deg); }
+                            100% { transform: translate(-50%, -50%) rotate(360deg); }
+                        }
+                        @keyframes discoBallBounce {
+                            0% { top: -10%; }
+                            20% { top: 20%; }
+                            40% { top: 15%; }
+                            60% { top: 20%; }
+                            80% { top: 18%; }
+                            100% { top: 20%; }
+                        }
+                    `;
+                    document.head.appendChild(discoBallStyle);
+                    dvdOverlay.appendChild(discoBall);
+                    
+                    // CREATE FLASHING LIGHTS AROUND THE SCREEN
+                    const lightColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffffff'];
+                    for (let i = 0; i < 12; i++) {
+                        const light = document.createElement('div');
+                        const angle = (i * 30) * Math.PI / 180;
+                        const radius = Math.min(window.innerWidth, window.innerHeight) * 0.45;
+                        const x = window.innerWidth / 2 + radius * Math.cos(angle);
+                        const y = window.innerHeight / 2 + radius * Math.sin(angle);
+                        
+                        light.style.cssText = `
+                            position: fixed;
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            left: ${x - 20}px;
+                            top: ${y - 20}px;
+                            z-index: 9999;
+                            pointer-events: none;
+                            animation: flashingLight 0.2s infinite alternate;
+                            animation-delay: ${i * 0.05}s;
+                            box-shadow: 0 0 30px currentColor;
+                        `;
+                        
+                        const lightStyle = document.createElement('style');
+                        lightStyle.textContent = `
+                            @keyframes flashingLight {
+                                0% { 
+                                    background: ${lightColors[i % lightColors.length]};
+                                    opacity: 1;
+                                    transform: scale(1);
+                                }
+                                100% { 
+                                    background: ${lightColors[(i + 1) % lightColors.length]};
+                                    opacity: 0.3;
+                                    transform: scale(1.2);
+                                }
+                            }
+                        `;
+                        document.head.appendChild(lightStyle);
+                        dvdOverlay.appendChild(light);
+                        
+                        // Remove light after celebration
+                        setTimeout(() => {
+                            light.remove();
+                            lightStyle.remove();
+                        }, 3000);
+                    }
+                    
+                    // MASSIVE CONFETTI EXPLOSION FROM EVERYWHERE!!!
+                    // Center explosion
+                    createBigConfetti();
+                    setTimeout(() => createBigConfetti(), 100);
+                    setTimeout(() => createBigConfetti(), 200);
+                    setTimeout(() => createBigConfetti(), 300);
+                    
+                    // Left side explosion
+                    setTimeout(() => createSideConfetti('left'), 150);
+                    setTimeout(() => createSideConfetti('left'), 250);
+                    
+                    // Right side explosion
+                    setTimeout(() => createSideConfetti('right'), 175);
+                    setTimeout(() => createSideConfetti('right'), 275);
+                    
+                    // Top explosion
+                    setTimeout(() => createTopConfetti(), 125);
+                    setTimeout(() => createTopConfetti(), 225);
+                    
+                    // Bottom explosion
+                    setTimeout(() => createBottomConfetti(), 200);
+                    setTimeout(() => createBottomConfetti(), 300);
+                    
+                    // Corner explosions from all 4 corners
+                    setTimeout(() => createCornerConfetti('top-left'), 100);
+                    setTimeout(() => createCornerConfetti('top-right'), 150);
+                    setTimeout(() => createCornerConfetti('bottom-left'), 200);
+                    setTimeout(() => createCornerConfetti('bottom-right'), 250);
+                    
+                    // Final mega explosion
+                    setTimeout(() => {
+                        createBigConfetti();
+                        createSideConfetti('left');
+                        createSideConfetti('right');
+                        createTopConfetti();
+                        createBottomConfetti();
+                    }, 400);
+                    
+                    // Flash the screen multiple times with disco colors
+                    let flashCount = 0;
+                    const discoColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffffff'];
+                    const flashInterval = setInterval(() => {
+                        dvdOverlay.style.background = discoColors[flashCount % discoColors.length];
+                        flashCount++;
+                        if (flashCount >= 12) {
+                            clearInterval(flashInterval);
+                            dvdOverlay.style.background = '#000000';
+                        }
+                    }, 100);
+                    
+                    console.log(`🎉 CORNER HIT #${cornerHits}! 🎉 This is what we've all been waiting for!`);
+                    
+                    // Clean up celebration elements
+                    setTimeout(() => {
+                        cornerHitText.remove();
+                        cornerHitStyle.remove();
+                        discoBall.remove();
+                        discoBallStyle.remove();
+                        dvdLogo.style.transform = 'scale(1) rotate(0deg)';
+                    }, 3000);
+                } else {
+                    // Regular wall hit
+                    dvdLogo.style.filter = `drop-shadow(0 0 20px ${colors[colorIndex]}) hue-rotate(${colorIndex * 45}deg)`;
+                }
+                
+                // Bounce off walls
+                if (hitLeftWall || hitRightWall) {
+                    velocityX = -velocityX;
+                    x = hitLeftWall ? 0 : screenWidth - logoWidth;
+                    colorIndex = (colorIndex + 1) % colors.length;
+                }
+                
+                if (hitTopWall || hitBottomWall) {
+                    velocityY = -velocityY;
+                    y = hitTopWall ? 0 : screenHeight - logoHeight;
+                    colorIndex = (colorIndex + 1) % colors.length;
+                }
+                
+                dvdLogo.style.left = x + 'px';
+                dvdLogo.style.top = y + 'px';
+                
+                requestAnimationFrame(animateDVD);
+            }
+            
+            animateDVD();
+            
+            // Add click to close
+            dvdOverlay.addEventListener('click', function() {
+                document.body.removeChild(dvdOverlay);
+                closeSearch();
+            });
+            
+            // Add escape key to close
+            const escapeHandler = function(e) {
+                if (e.key === 'Escape') {
+                    document.body.removeChild(dvdOverlay);
+                    document.removeEventListener('keydown', escapeHandler);
+                    closeSearch();
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
+            
+
+        }
+
+        // Pizza animation function
+        function showPizzaAnimation() {
+            // Create pizza overlay with Italian flag background
+            const pizzaOverlay = document.createElement('div');
+            pizzaOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: linear-gradient(to right, #009246 33.33%, #ffffff 33.33% 66.66%, #ce2b37 66.66%);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                pointer-events: none;
+            `;
+            
+            const pizza = document.createElement('div');
+            pizza.innerHTML = `🍕`;
+            pizza.style.cssText = `
+                font-size: 50px;
+                transform: scale(0) rotate(0deg);
+                animation: pizzaExpand 2.5s ease-out forwards;
+            `;
+            
+            // Add keyframes for pizza animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pizzaExpand {
+                    0% {
+                        transform: scale(0) rotate(0deg);
+                        opacity: 1;
+                    }
+                    50% {
+                        transform: scale(25) rotate(360deg);
+                        opacity: 1;
+                    }
+                    75% {
+                        transform: scale(30) rotate(540deg);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: scale(35) rotate(720deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            pizzaOverlay.appendChild(pizza);
+            document.body.appendChild(pizzaOverlay);
+            
+            // Remove after animation
+            setTimeout(() => {
+                document.body.removeChild(pizzaOverlay);
+                document.head.removeChild(style);
+                closeSearch();
+            }, 2500);
+        }
+
+        // Croissant animation function
+        function showCroissantAnimation() {
+            // Create croissant overlay
+            const croissantOverlay = document.createElement('div');
+            croissantOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: linear-gradient(to right, #002395 33.33%, #ffffff 33.33% 66.66%, #ed2939 66.66%);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                pointer-events: none;
+            `;
+            
+            const croissant = document.createElement('div');
+            croissant.innerHTML = `🥐`;
+            croissant.style.cssText = `
+                font-size: 50px;
+                transform: scale(0);
+                animation: croissantExpand 2s ease-out forwards;
+            `;
+            
+            // Add keyframes for animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes croissantExpand {
+                    0% {
+                        transform: scale(0);
+                        opacity: 1;
+                    }
+                    50% {
+                        transform: scale(20);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: scale(25);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            croissantOverlay.appendChild(croissant);
+            document.body.appendChild(croissantOverlay);
+            
+            // Remove after animation
+            setTimeout(() => {
+                document.body.removeChild(croissantOverlay);
+                document.head.removeChild(style);
+                closeSearch();
+            }, 2000);
+        }
+
+        // Konami Code Easter Egg
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+        let konamiSequence = [];
+        let konamiUnlocked = false;
+
+        function checkKonamiCode(key) {
+            konamiSequence.push(key);
+            
+            // Keep only the last 10 keys
+            if (konamiSequence.length > 10) {
+                konamiSequence.shift();
+            }
+            
+            // Check if the sequence matches
+            if (konamiSequence.length === 10) {
+                const matches = konamiSequence.every((key, index) => key === konamiCode[index]);
+                if (matches && !konamiUnlocked) {
+                    triggerKonamiEasterEgg();
+                }
+            }
+        }
+
+        function triggerKonamiEasterEgg() {
+            konamiUnlocked = true;
+            
+            // Create rainbow mode overlay
+            const rainbowOverlay = document.createElement('div');
+            rainbowOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080);
+                background-size: 400% 400%;
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                pointer-events: none;
+                animation: rainbowFlow 3s ease-in-out infinite;
+                opacity: 0.9;
+            `;
+            
+            // Add rainbow animation
+            const rainbowStyle = document.createElement('style');
+            rainbowStyle.textContent = `
+                @keyframes rainbowFlow {
+                    0% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+                
+                @keyframes konamiPulse {
+                    0% {
+                        transform: translate(-50%, -50%) scale(0);
+                        opacity: 0;
+                    }
+                    20% {
+                        transform: translate(-50%, -50%) scale(1.2);
+                        opacity: 1;
+                    }
+                    40% {
+                        transform: translate(-50%, -50%) scale(1);
+                        opacity: 1;
+                    }
+                    60% {
+                        transform: translate(-50%, -50%) scale(1.1);
+                        opacity: 1;
+                    }
+                    80% {
+                        transform: translate(-50%, -50%) scale(1);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translate(-50%, -50%) scale(0.9);
+                        opacity: 0;
+                    }
+                }
+                
+                .rainbow-text {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080);
+                    background-size: 400% 400%;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    animation: rainbowFlow 2s ease-in-out infinite;
+                }
+            `;
+            document.head.appendChild(rainbowStyle);
+            
+            // Create success message
+            const successMessage = document.createElement('div');
+            successMessage.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 10001;
+                text-align: center;
+                pointer-events: none;
+                animation: konamiPulse 4s ease-out forwards;
+            `;
+            
+            successMessage.innerHTML = `
+                <div style="font-size: 80px; margin-bottom: 20px;">🎮</div>
+                <div class="rainbow-text" style="font-size: 48px; font-weight: 900; margin-bottom: 20px; font-family: 'Arial Black', Arial, sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">KONAMI CODE</div>
+                <div class="rainbow-text" style="font-size: 32px; font-weight: bold; margin-bottom: 15px; font-family: 'Arial Black', Arial, sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">ACTIVATED!</div>
+                <div style="font-size: 20px; color: white; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">🌈 RAINBOW MODE UNLOCKED! 🌈</div>
+            `;
+            
+            document.body.appendChild(rainbowOverlay);
+            document.body.appendChild(successMessage);
+            
+            // MASSIVE confetti explosion from everywhere
+            setTimeout(() => createBigConfetti(), 100);
+            setTimeout(() => createBigConfetti(), 300);
+            setTimeout(() => createBigConfetti(), 500);
+            setTimeout(() => createSideConfetti('left'), 200);
+            setTimeout(() => createSideConfetti('right'), 400);
+            setTimeout(() => createTopConfetti(), 150);
+            setTimeout(() => createBottomConfetti(), 350);
+            setTimeout(() => createCornerConfetti('top-left'), 250);
+            setTimeout(() => createCornerConfetti('top-right'), 450);
+            setTimeout(() => createCornerConfetti('bottom-left'), 300);
+            setTimeout(() => createCornerConfetti('bottom-right'), 500);
+            
+            // Final mega explosion
+            setTimeout(() => {
+                createBigConfetti();
+                createSideConfetti('left');
+                createSideConfetti('right');
+                createTopConfetti();
+                createBottomConfetti();
+            }, 700);
+            
+            // Show secret joke after 2 seconds
+            setTimeout(() => {
+                showKonamiJoke();
+            }, 2000);
+            
+            // Clean up rainbow overlay after 4 seconds
+            setTimeout(() => {
+                rainbowOverlay.remove();
+                successMessage.remove();
+                rainbowStyle.remove();
+                
+                // Enable permanent rainbow mode for the site
+                enablePermanentRainbowMode();
+            }, 4000);
+        }
+
+        function showKonamiJoke() {
+            const jokeOverlay = document.createElement('div');
+            jokeOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            
+            const jokeBox = document.createElement('div');
+            jokeBox.style.cssText = `
+                background: white;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                text-align: center;
+                max-width: 500px;
+                margin: 20px;
+                animation: alertPop 0.3s ease-out;
+                border: 5px solid;
+                border-image: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) 1;
+            `;
+            
+            jokeBox.innerHTML = `
+                <div style="font-size: 60px; margin-bottom: 20px;">🎮</div>
+                <div class="rainbow-text" style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">SECRET KONAMI JOKE UNLOCKED!</div>
+                <div style="font-size: 18px; color: #333; margin-bottom: 15px; line-height: 1.4; font-weight: bold;">Why did the gamer break up with the Konami code?</div>
+                <div style="font-size: 16px; color: #666; margin-bottom: 25px; line-height: 1.4; font-style: italic;">Because it was too predictable - up, up, down, down, left, right, left, right, B, A... and the relationship was over!</div>
+                <div style="font-size: 14px; color: #888; margin-bottom: 25px;">🌈 You've unlocked permanent rainbow mode! 🌈</div>
+                <button id="konami-joke-ok-btn" style="
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080);
+                    background-size: 400% 400%;
+                    animation: rainbowFlow 2s ease-in-out infinite;
+                    color: white;
+                    border: none;
+                    padding: 15px 35px;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Awesome!</button>
+            `;
+            
+            jokeOverlay.appendChild(jokeBox);
+            document.body.appendChild(jokeOverlay);
+            
+            // Close joke when OK is clicked
+            document.getElementById('konami-joke-ok-btn').addEventListener('click', function() {
+                document.body.removeChild(jokeOverlay);
+            });
+            
+            // Close joke when clicking outside
+            jokeOverlay.addEventListener('click', function(e) {
+                if (e.target === jokeOverlay) {
+                    document.body.removeChild(jokeOverlay);
+                }
+            });
+        }
+
+        function enablePermanentRainbowModeQuiet() {
+            // Add rainbow CSS variables and styles (without celebration)
+            const rainbowModeStyle = document.createElement('style');
+            rainbowModeStyle.id = 'rainbow-mode-styles';
+            rainbowModeStyle.textContent = `
+                :root {
+                    --primary-color: #ff0000 !important;
+                    --primary-dark: #cc0000 !important;
+                    --primary-light: #ff6666 !important;
+                }
+                
+                .dynamic-primary {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 3s ease-in-out infinite !important;
+                }
+                
+                .dynamic-primary:hover {
+                    background: linear-gradient(45deg, #ff0080, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff) !important;
+                    background-size: 300% 300% !important;
+                    animation: rainbowFlow 1.5s ease-in-out infinite !important;
+                    transform: scale(1.05) !important;
+                    box-shadow: 0 0 30px rgba(255, 255, 255, 0.8) !important;
+                }
+                
+                .gradient-bg {
+                    background: linear-gradient(135deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 4s ease-in-out infinite !important;
+                }
+                
+                .dynamic-primary-text {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    -webkit-background-clip: text !important;
+                    -webkit-text-fill-color: transparent !important;
+                    background-clip: text !important;
+                    animation: rainbowFlow 2s ease-in-out infinite !important;
+                }
+                
+                .dynamic-primary-text:hover {
+                    background: linear-gradient(45deg, #ff00ff, #ff0080, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff) !important;
+                    background-size: 300% 300% !important;
+                    animation: rainbowFlow 1s ease-in-out infinite !important;
+                    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8) !important;
+                }
+                
+                .theme-toggle {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 3s ease-in-out infinite !important;
+                }
+                
+                .theme-toggle:hover {
+                    background: linear-gradient(45deg, #8000ff, #ff00ff, #ff0080, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff) !important;
+                    background-size: 300% 300% !important;
+                    animation: rainbowFlow 1.5s ease-in-out infinite !important;
+                    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6) !important;
+                }
+                
+                .section-card {
+                    border: 2px solid transparent !important;
+                    background-clip: padding-box !important;
+                }
+                
+                .section-card:hover {
+                    border: 2px solid !important;
+                    border-image: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) 1 !important;
+                    box-shadow: 0 20px 40px rgba(255, 145, 77, 0.2), 0 0 30px rgba(255, 255, 255, 0.3) !important;
+                    background: linear-gradient(white, white) padding-box, linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) border-box !important;
+                }
+                
+                .dark .section-card:hover {
+                    background: linear-gradient(#374151, #374151) padding-box, linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) border-box !important;
+                }
+                
+                button:hover, .nav-link:hover, a:hover {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 300% 300% !important;
+                    -webkit-background-clip: text !important;
+                    -webkit-text-fill-color: transparent !important;
+                    background-clip: text !important;
+                    animation: rainbowFlow 1.5s ease-in-out infinite !important;
+                    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important;
+                }
+                
+                .dynamic-primary-light {
+                    background: linear-gradient(45deg, #ff6666, #ffb366, #ffff66, #b3ff66, #66ff66, #66ffb3, #66ffff, #66b3ff, #6666ff, #b366ff, #ff66ff, #ff66b3) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 3.5s ease-in-out infinite !important;
+                }
+                
+                .dynamic-focus-ring:focus {
+                    --tw-ring-color: #ff0000 !important;
+                    ring-color: #ff0000 !important;
+                    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.5) !important;
+                }
+                
+                #search-toggle {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 3s ease-in-out infinite !important;
+                    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+                }
+                
+                #search-toggle:hover {
+                    background: linear-gradient(45deg, #ff00ff, #ff0080, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff) !important;
+                    background-size: 300% 300% !important;
+                    animation: rainbowFlow 1.5s ease-in-out infinite !important;
+                    box-shadow: 0 0 25px rgba(255, 255, 255, 0.8) !important;
+                }
+                
+                .hamburger-line {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 2s ease-in-out infinite !important;
+                }
+                
+                .menu-link:hover {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 300% 300% !important;
+                    -webkit-background-clip: text !important;
+                    -webkit-text-fill-color: transparent !important;
+                    background-clip: text !important;
+                    animation: rainbowFlow 1s ease-in-out infinite !important;
+                    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8) !important;
+                    transform: scale(1.1) !important;
+                }
+            `;
+            document.head.appendChild(rainbowModeStyle);
+        }
+
+        function enablePermanentRainbowMode() {
+            // Add rainbow CSS variables and styles
+            const rainbowModeStyle = document.createElement('style');
+            rainbowModeStyle.id = 'rainbow-mode-styles';
+            rainbowModeStyle.textContent = `
+                :root {
+                    --primary-color: #ff0000 !important;
+                    --primary-dark: #cc0000 !important;
+                    --primary-light: #ff6666 !important;
+                }
+                
+                .dynamic-primary {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 3s ease-in-out infinite !important;
+                }
+                
+                .dynamic-primary:hover {
+                    background: linear-gradient(45deg, #ff0080, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff) !important;
+                    background-size: 300% 300% !important;
+                    animation: rainbowFlow 1.5s ease-in-out infinite !important;
+                    transform: scale(1.05) !important;
+                    box-shadow: 0 0 30px rgba(255, 255, 255, 0.8) !important;
+                }
+                
+                .gradient-bg {
+                    background: linear-gradient(135deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 4s ease-in-out infinite !important;
+                }
+                
+                .dynamic-primary-text {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    -webkit-background-clip: text !important;
+                    -webkit-text-fill-color: transparent !important;
+                    background-clip: text !important;
+                    animation: rainbowFlow 2s ease-in-out infinite !important;
+                }
+                
+                .dynamic-primary-text:hover {
+                    background: linear-gradient(45deg, #ff00ff, #ff0080, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff) !important;
+                    background-size: 300% 300% !important;
+                    animation: rainbowFlow 1s ease-in-out infinite !important;
+                    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8) !important;
+                }
+                
+                .theme-toggle {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 3s ease-in-out infinite !important;
+                }
+                
+                .theme-toggle:hover {
+                    background: linear-gradient(45deg, #8000ff, #ff00ff, #ff0080, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff) !important;
+                    background-size: 300% 300% !important;
+                    animation: rainbowFlow 1.5s ease-in-out infinite !important;
+                    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6) !important;
+                }
+                
+                .section-card {
+                    border: 2px solid transparent !important;
+                    background-clip: padding-box !important;
+                }
+                
+                .section-card:hover {
+                    border: 2px solid !important;
+                    border-image: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) 1 !important;
+                    box-shadow: 0 20px 40px rgba(255, 145, 77, 0.2), 0 0 30px rgba(255, 255, 255, 0.3) !important;
+                    background: linear-gradient(white, white) padding-box, linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) border-box !important;
+                }
+                
+                .dark .section-card:hover {
+                    background: linear-gradient(#374151, #374151) padding-box, linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) border-box !important;
+                }
+                
+                button:hover, .nav-link:hover, a:hover {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 300% 300% !important;
+                    -webkit-background-clip: text !important;
+                    -webkit-text-fill-color: transparent !important;
+                    background-clip: text !important;
+                    animation: rainbowFlow 1.5s ease-in-out infinite !important;
+                    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important;
+                }
+                
+                .dynamic-primary-light {
+                    background: linear-gradient(45deg, #ff6666, #ffb366, #ffff66, #b3ff66, #66ff66, #66ffb3, #66ffff, #66b3ff, #6666ff, #b366ff, #ff66ff, #ff66b3) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 3.5s ease-in-out infinite !important;
+                }
+                
+                .dynamic-focus-ring:focus {
+                    --tw-ring-color: #ff0000 !important;
+                    ring-color: #ff0000 !important;
+                    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.5) !important;
+                }
+                
+                #search-toggle {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 3s ease-in-out infinite !important;
+                    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+                }
+                
+                #search-toggle:hover {
+                    background: linear-gradient(45deg, #ff00ff, #ff0080, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff) !important;
+                    background-size: 300% 300% !important;
+                    animation: rainbowFlow 1.5s ease-in-out infinite !important;
+                    box-shadow: 0 0 25px rgba(255, 255, 255, 0.8) !important;
+                }
+                
+                .hamburger-line {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 400% 400% !important;
+                    animation: rainbowFlow 2s ease-in-out infinite !important;
+                }
+                
+                .menu-link:hover {
+                    background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) !important;
+                    background-size: 300% 300% !important;
+                    -webkit-background-clip: text !important;
+                    -webkit-text-fill-color: transparent !important;
+                    background-clip: text !important;
+                    animation: rainbowFlow 1s ease-in-out infinite !important;
+                    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8) !important;
+                    transform: scale(1.1) !important;
+                }
+            `;
+            document.head.appendChild(rainbowModeStyle);
+            
+            // Rainbow mode no longer saves to localStorage - resets on reload
+            
+            // Show a small notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                font-size: 14px;
+                font-weight: bold;
+                color: #333;
+                border: 2px solid;
+                border-image: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080) 1;
+                animation: slideInRight 0.5s ease-out;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span>🌈</span>
+                    <span>Rainbow mode activated!</span>
+                </div>
+            `;
+            
+            const slideStyle = document.createElement('style');
+            slideStyle.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(slideStyle);
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+                slideStyle.remove();
+            }, 3000);
+        }
+
+        // Add keyboard listener for Konami code
+        document.addEventListener('keydown', function(e) {
+            // Only track if not typing in an input field
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                checkKonamiCode(e.code);
+            }
+        });
+
+        // Confetti functions
+        function createConfetti(element, count = 8) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < count; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = centerX + (Math.random() - 0.5) * 100 + 'px';
+                confetti.style.top = centerY + 'px';
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 4000);
+            }
+        }
+        
+        function createBigConfetti() {
+            const colors = ['#ff914d', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'big-confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '-20px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animation = `confetti-fall ${3 + Math.random() * 2}s linear forwards`;
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 6000);
+            }
+        }
+
+        function createSideConfetti(side) {
+            const colors = ['#ff914d', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+            
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'big-confetti';
+                
+                if (side === 'left') {
+                    confetti.style.left = '-20px';
+                    confetti.style.top = Math.random() * window.innerHeight + 'px';
+                    confetti.style.animation = `confetti-side-right ${2 + Math.random() * 2}s linear forwards`;
+                } else {
+                    confetti.style.left = window.innerWidth + 'px';
+                    confetti.style.top = Math.random() * window.innerHeight + 'px';
+                    confetti.style.animation = `confetti-side-left ${2 + Math.random() * 2}s linear forwards`;
+                }
+                
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 4000);
+            }
+        }
+
+        function createTopConfetti() {
+            const colors = ['#ff914d', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+            
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'big-confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '-20px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animation = `confetti-fall-fast ${1.5 + Math.random() * 1}s linear forwards`;
+                confetti.style.animationDelay = Math.random() * 0.3 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+
+        function createBottomConfetti() {
+            const colors = ['#ff914d', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+            
+            for (let i = 0; i < 35; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'big-confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = window.innerHeight + 'px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animation = `confetti-rise ${2 + Math.random() * 1.5}s linear forwards`;
+                confetti.style.animationDelay = Math.random() * 0.4 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 4000);
+            }
+        }
+
+        function createCornerConfetti(corner) {
+            const colors = ['#ff914d', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+            
+            for (let i = 0; i < 25; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'big-confetti';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 0.3 + 's';
+                
+                switch(corner) {
+                    case 'top-left':
+                        confetti.style.left = '-20px';
+                        confetti.style.top = '-20px';
+                        confetti.style.animation = `confetti-diagonal-br ${2.5 + Math.random() * 1}s linear forwards`;
+                        break;
+                    case 'top-right':
+                        confetti.style.left = window.innerWidth + 'px';
+                        confetti.style.top = '-20px';
+                        confetti.style.animation = `confetti-diagonal-bl ${2.5 + Math.random() * 1}s linear forwards`;
+                        break;
+                    case 'bottom-left':
+                        confetti.style.left = '-20px';
+                        confetti.style.top = window.innerHeight + 'px';
+                        confetti.style.animation = `confetti-diagonal-tr ${2.5 + Math.random() * 1}s linear forwards`;
+                        break;
+                    case 'bottom-right':
+                        confetti.style.left = window.innerWidth + 'px';
+                        confetti.style.top = window.innerHeight + 'px';
+                        confetti.style.animation = `confetti-diagonal-tl ${2.5 + Math.random() * 1}s linear forwards`;
+                        break;
+                }
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 4000);
+            }
+        }
+
+        function showCustomAlert(message) {
+            // Create custom alert overlay
+            const alertOverlay = document.createElement('div');
+            alertOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            
+            const alertBox = document.createElement('div');
+            alertBox.style.cssText = `
+                background: white;
+                padding: 30px;
+                border-radius: 15px;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                text-align: center;
+                max-width: 400px;
+                margin: 20px;
+                animation: alertPop 0.3s ease-out;
+            `;
+            
+            alertBox.innerHTML = `
+                <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+                <div style="font-size: 18px; color: #333; margin-bottom: 25px; line-height: 1.4;">${message}</div>
+                <button id="alert-ok-btn" style="
+                    background: #ff914d;
+                    color: white;
+                    border: none;
+                    padding: 12px 30px;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                " onmouseover="this.style.background='#e6823d'" onmouseout="this.style.background='#ff914d'">OK</button>
+            `;
+            
+            // Add animations
+            const alertStyle = document.createElement('style');
+            alertStyle.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes alertPop {
+                    0% { transform: scale(0.7); opacity: 0; }
+                    50% { transform: scale(1.05); }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+            `;
+            
+            document.head.appendChild(alertStyle);
+            alertOverlay.appendChild(alertBox);
+            document.body.appendChild(alertOverlay);
+            
+            // Close alert when OK is clicked
+            document.getElementById('alert-ok-btn').addEventListener('click', function() {
+                document.body.removeChild(alertOverlay);
+                document.head.removeChild(alertStyle);
+            });
+            
+            // Close alert when clicking outside
+            alertOverlay.addEventListener('click', function(e) {
+                if (e.target === alertOverlay) {
+                    document.body.removeChild(alertOverlay);
+                    document.head.removeChild(alertStyle);
+                }
+            });
+        }
+
+        function glitchWebsite() {
+            // Create glitch overlay
+            const glitchOverlay = document.createElement('div');
+            glitchOverlay.id = 'glitch-overlay';
+            glitchOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: #000000;
+                z-index: 99999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #00ff00;
+                font-family: 'Courier New', monospace;
+                font-size: 24px;
+                text-align: center;
+                pointer-events: auto;
+            `;
+            
+            // Add glitch animations first
+            const glitchStyle = document.createElement('style');
+            glitchStyle.id = 'glitch-styles';
+            glitchStyle.textContent = `
+                @keyframes glitchFlicker {
+                    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                        opacity: 1;
+                        background: #000000;
+                    }
+                    20%, 24%, 55% {
+                        opacity: 0.9;
+                        background: #001100;
+                    }
+                    22% {
+                        opacity: 0.95;
+                        background: #110000;
+                    }
+                }
+                
+                @keyframes glitchText {
+                    0% {
+                        transform: translate(0);
+                        text-shadow: 0 0 0 #00ff00;
+                    }
+                    10% {
+                        transform: translate(-3px, 2px);
+                        text-shadow: 2px 0 0 #ff0000, -2px 0 0 #00ffff;
+                    }
+                    20% {
+                        transform: translate(-2px, -2px);
+                        text-shadow: -2px 0 0 #ff0000, 2px 0 0 #00ffff;
+                    }
+                    30% {
+                        transform: translate(3px, 1px);
+                        text-shadow: 1px 0 0 #ff0000, -1px 0 0 #00ffff;
+                    }
+                    40% {
+                        transform: translate(-1px, -1px);
+                        text-shadow: -1px 0 0 #ff0000, 1px 0 0 #00ffff;
+                    }
+                    50% {
+                        transform: translate(2px, 2px);
+                        text-shadow: 2px 0 0 #ff0000, -2px 0 0 #00ffff;
+                    }
+                    60% {
+                        transform: translate(1px, -2px);
+                        text-shadow: -2px 0 0 #ff0000, 2px 0 0 #00ffff;
+                    }
+                    70% {
+                        transform: translate(-2px, 1px);
+                        text-shadow: 1px 0 0 #ff0000, -1px 0 0 #00ffff;
+                    }
+                    80% {
+                        transform: translate(2px, -1px);
+                        text-shadow: -1px 0 0 #ff0000, 1px 0 0 #00ffff;
+                    }
+                    90% {
+                        transform: translate(-1px, 2px);
+                        text-shadow: 2px 0 0 #ff0000, -2px 0 0 #00ffff;
+                    }
+                    100% {
+                        transform: translate(0);
+                        text-shadow: 0 0 0 #00ff00;
+                    }
+                }
+                
+                .glitch-container {
+                    animation: glitchFlicker 0.15s infinite;
+                }
+                
+                .glitch-text {
+                    animation: glitchText 0.1s infinite;
+                    display: block;
+                    margin: 10px 0;
+                }
+                
+                .error-red {
+                    color: #ff0000 !important;
+                    font-weight: bold;
+                }
+                
+                .warning-yellow {
+                    color: #ffff00 !important;
+                }
+                
+                .system-green {
+                    color: #00ff00 !important;
+                }
+            `;
+            
+            document.head.appendChild(glitchStyle);
+            
+            glitchOverlay.innerHTML = `
+                <div class="glitch-container">
+                    <div class="glitch-text system-green" style="font-size: 32px; font-weight: bold;">FATAL SYSTEM ERROR</div>
+                    <div class="glitch-text error-red" style="font-size: 18px; margin-top: 25px;">Website.exe has encountered a critical error</div>
+                    <div class="glitch-text error-red" style="font-size: 16px; margin-top: 15px;">CLICK OVERFLOW DETECTED: Buffer exceeded</div>
+                    <div class="glitch-text system-green" style="font-size: 14px; margin-top: 15px;">Error Code: 0x${Math.random().toString(16).substr(2, 8).toUpperCase()}</div>
+                    <div class="glitch-text warning-yellow" style="font-size: 14px; margin-top: 20px;">Memory dump in progress...</div>
+                    <div class="glitch-text warning-yellow" style="font-size: 14px; margin-top: 10px;">Stack trace: fidget_button.click() -> chaos.exe</div>
+                    <div class="glitch-text error-red" style="font-size: 16px; margin-top: 25px; font-weight: bold;">SYSTEM WILL RESTART IN <span id="countdown">3</span> SECONDS</div>
+                    <div class="glitch-text system-green" style="font-size: 12px; margin-top: 20px;">Please don't click so much next time... 😅</div>
+                </div>
+            `;
+            
+            document.body.appendChild(glitchOverlay);
+            
+            // Make the page behind glitch too (but keep overlay visible)
+            const allElements = document.querySelectorAll('body > *:not(#glitch-overlay):not(#glitch-styles)');
+            allElements.forEach(element => {
+                element.style.filter = 'hue-rotate(180deg) saturate(3) contrast(2) blur(1px)';
+                element.style.animation = 'glitchText 0.2s infinite';
+            });
+            
+            // Countdown timer
+            let countdown = 3;
+            const countdownElement = document.getElementById('countdown');
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                if (countdownElement) {
+                    countdownElement.textContent = countdown;
+                }
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    showGlitchyLoading();
+                }
+            }, 1000);
+        }
+
+        function showGlitchyLoading() {
+            // Clear the existing glitch overlay
+            const existingOverlay = document.getElementById('glitch-overlay');
+            if (existingOverlay) {
+                existingOverlay.remove();
+            }
+            
+            // Create loading overlay
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.id = 'loading-overlay';
+            loadingOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: #000000;
+                z-index: 99999;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                color: #00ff00;
+                font-family: 'Courier New', monospace;
+                font-size: 18px;
+                text-align: center;
+                pointer-events: auto;
+            `;
+            
+            // Add loading animations
+            const loadingStyle = document.createElement('style');
+            loadingStyle.id = 'loading-styles';
+            loadingStyle.textContent = `
+                @keyframes loadingGlitch {
+                    0%, 90% {
+                        transform: translate(0);
+                        filter: hue-rotate(0deg);
+                    }
+                    10% {
+                        transform: translate(-2px, 1px);
+                        filter: hue-rotate(90deg);
+                    }
+                    20% {
+                        transform: translate(2px, -1px);
+                        filter: hue-rotate(180deg);
+                    }
+                    30% {
+                        transform: translate(-1px, 2px);
+                        filter: hue-rotate(270deg);
+                    }
+                    40% {
+                        transform: translate(1px, -2px);
+                        filter: hue-rotate(360deg);
+                    }
+                }
+                
+                @keyframes progressGlitch {
+                    0% { width: 0%; }
+                    25% { width: 30%; }
+                    50% { width: 60%; }
+                    75% { width: 85%; }
+                    85% { width: 95%; }
+                    90% { width: 0%; } /* Glitch back to start */
+                    95% { width: 40%; }
+                    100% { width: 0%; } /* Glitch back again */
+                }
+                
+                .loading-container {
+                    animation: loadingGlitch 0.3s infinite;
+                }
+                
+                .loading-text {
+                    margin: 10px 0;
+                    text-shadow: 2px 0 0 #ff0000, -2px 0 0 #00ffff;
+                }
+                
+                .progress-container {
+                    width: 400px;
+                    height: 20px;
+                    background: #333333;
+                    border: 2px solid #00ff00;
+                    margin: 20px 0;
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .progress-bar-glitch {
+                    height: 100%;
+                    background: linear-gradient(90deg, #00ff00, #ffff00, #ff0000);
+                    animation: progressGlitch 2s infinite;
+                    position: relative;
+                }
+                
+                .progress-bar-glitch::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: repeating-linear-gradient(
+                        90deg,
+                        transparent,
+                        transparent 2px,
+                        rgba(255, 255, 255, 0.1) 2px,
+                        rgba(255, 255, 255, 0.1) 4px
+                    );
+                    animation: loadingGlitch 0.1s infinite;
+                }
+            `;
+            
+            document.head.appendChild(loadingStyle);
+            
+            loadingOverlay.innerHTML = `
+                <div class="loading-container">
+                    <div class="loading-text" style="font-size: 24px; color: #ff0000; margin-bottom: 30px;">SYSTEM RECOVERY IN PROGRESS</div>
+                    <div class="loading-text" style="color: #ffff00;">Attempting to restore website.exe...</div>
+                    <div class="progress-container">
+                        <div class="progress-bar-glitch"></div>
+                    </div>
+                    <div class="loading-text" style="font-size: 14px; color: #00ff00;">Loading... <span id="loading-dots">.</span></div>
+                    <div class="loading-text" style="font-size: 12px; color: #888888; margin-top: 20px;">ERROR: Progress keeps resetting due to click overflow damage</div>
+                    <div class="loading-text" style="font-size: 12px; color: #888888;">Retrying... Please wait...</div>
+                </div>
+            `;
+            
+            document.body.appendChild(loadingOverlay);
+            
+            // Animate loading dots
+            let dotCount = 1;
+            const dotsInterval = setInterval(() => {
+                const dotsElement = document.getElementById('loading-dots');
+                if (dotsElement) {
+                    dotCount = (dotCount % 3) + 1;
+                    dotsElement.textContent = '.'.repeat(dotCount);
+                }
+            }, 500);
+            
+            // Reload after 5 seconds
+            setTimeout(() => {
+                clearInterval(dotsInterval);
+                location.reload();
+            }, 5000);
+        }
+
+        // Quiz Questions
+        const quizQuestions = [
+            {
+                question: "How old is Lachlan?",
+                answers: ["12 years old", "13 years old", "14 years old", "15 years old"],
+                correct: 1
+            },
+            {
+                question: "Which instruments does Lachlan play?",
+                answers: ["Guitar and drums", "Violin and cello", "Euphonium and piano", "Trumpet and saxophone"],
+                correct: 2
+            },
+            {
+                question: "What is the name of Lachlan's company?",
+                answers: ["TechnoShirts", "Transnology", "ThurloWear", "StudentStore"],
+                correct: 1
+            },
+            {
+                question: "What happens if you click the clicker fidget 30 times?",
+                answers: ["Nothing special", "Confetti appears", "The website glitches", "A joke appears"],
+                correct: 2
+            },
+            {
+                question: "What should you NOT search for in the search bar?",
+                answers: ["Hello", "Music", "Bonjour", "Jokes"],
+                correct: 2
+            },
+            {
+                question: "Which of these is one of Lachlan's other web projects?",
+                answers: ["Coffee Rankings", "Hot Chocolate Rankings", "Tea Reviews", "Smoothie Scores"],
+                correct: 1
+            },
+            {
+                question: "What award did Lachlan receive in 2023?",
+                answers: ["French Award", "Music Excellence", "Service To CPPS 'Thurlow' Award", "Academic Achievement"],
+                correct: 2
+            },
+            {
+                question: "How many different types of jokes are featured in the jokes section?",
+                answers: ["4 types", "5 types", "6 types", "7 types"],
+                correct: 2
+            }
+        ];
+
+        // Random Jokes Array
+        const randomJokes = [
+            {
+                setup: "Why don't scientists trust atoms?",
+                punchline: "Because they make up everything!"
+            },
+            {
+                setup: "What do you call a fake noodle?",
+                punchline: "An impasta!"
+            },
+            {
+                setup: "Why did the math book look so sad?",
+                punchline: "Because it had too many problems!"
+            },
+            {
+                setup: "What do you call a bear with no teeth?",
+                punchline: "A gummy bear!"
+            },
+            {
+                setup: "Why do programmers prefer dark mode?",
+                punchline: "Because light attracts bugs!"
+            },
+            {
+                setup: "What's the best thing about Switzerland?",
+                punchline: "I don't know, but the flag is a big plus!"
+            },
+            {
+                setup: "Why can't a bicycle stand up by itself?",
+                punchline: "It's two tired!"
+            },
+            {
+                setup: "What do you call a sleeping bull?",
+                punchline: "A bulldozer!"
+            },
+            {
+                setup: "Why don't eggs tell jokes?",
+                punchline: "They'd crack each other up!"
+            },
+            {
+                setup: "How many programmers does it take to change a light bulb?",
+                punchline: "None. That's a hardware problem!"
+            },
+            {
+                setup: "Why did the computer go to the doctor?",
+                punchline: "Because it had a virus!"
+            },
+            {
+                setup: "What do you call a fish wearing a crown?",
+                punchline: "A king fish!"
+            },
+            {
+                setup: "Why don't elephants use computers?",
+                punchline: "They're afraid of the mouse!"
+            },
+            {
+                setup: "Why did the scarecrow win an award?",
+                punchline: "He was outstanding in his field!"
+            },
+            {
+                setup: "I'm reading a book about anti-gravity.",
+                punchline: "It's impossible to put down!"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let quizActive = false;
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            document.body.classList.toggle('blue-theme');
+            localStorage.setItem('colorTheme', document.body.classList.contains('blue-theme') ? 'blue' : 'orange');
+        }
+
+        // Animated Favicon
+        function animateFavicon() {
+            const emojis = ['😀', '😄', '😁', '😆', '😂', '🤣'];
+            let currentIndex = 0;
+            
+            function updateFavicon() {
+                const favicon = document.getElementById('favicon');
+                const emoji = emojis[currentIndex];
+                const svgFavicon = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>${emoji}</text></svg>`;
+                favicon.href = svgFavicon;
+                
+                currentIndex++;
+                
+                if (currentIndex < emojis.length) {
+                    // Continue animation every 1 second
+                    setTimeout(updateFavicon, 1000);
+                } else {
+                    // Stay on last emoji for 10 seconds, then restart
+                    setTimeout(() => {
+                        currentIndex = 0;
+                        updateFavicon();
+                    }, 10000);
+                }
+            }
+            
+            updateFavicon();
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('colorTheme');
+            if (savedTheme === 'blue') {
+                document.body.classList.add('blue-theme');
+            }
+            
+            // Rainbow mode no longer persists - resets on page reload
+            
+            // Start favicon animation
+            animateFavicon();
+        });
+
+        // Hamburger menu toggle
+        const menuButton = document.getElementById('menu-button');
+        const menuOverlay = document.getElementById('menu-overlay');
+        const menuContent = document.getElementById('menu-content');
+        let menuOpen = false;
+
+        function openMenu() {
+            menuOpen = true;
+            document.body.style.overflow = 'hidden';
+            menuButton.classList.add('menu-open');
+            menuOverlay.classList.remove('translate-x-full');
+            
+            setTimeout(() => {
+                menuContent.classList.remove('opacity-0');
+                menuContent.classList.add('menu-open');
+            }, 200);
+        }
+
+        function closeMenu() {
+            menuOpen = false;
+            document.body.style.overflow = '';
+            menuButton.classList.remove('menu-open');
+            menuContent.classList.add('opacity-0');
+            menuContent.classList.remove('menu-open');
+            
+            setTimeout(() => {
+                menuOverlay.classList.add('translate-x-full');
+            }, 100);
+        }
+
+        menuButton.addEventListener('click', function() {
+            if (menuOpen) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+
+        // Close menu when clicking on overlay
+        menuOverlay.addEventListener('click', function(e) {
+            if (e.target === menuOverlay) {
+                closeMenu();
+            }
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', function() {
+                closeMenu();
+            });
+        });
+
+        // Close menu with close button
+        document.getElementById('menu-close-button').addEventListener('click', function() {
+            closeMenu();
+        });
+
+        // Close menu with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && menuOpen) {
+                closeMenu();
+            }
+        });
+
+        // Random Joke Generator
+        document.getElementById('random-joke-btn').addEventListener('click', function() {
+            const randomIndex = Math.floor(Math.random() * randomJokes.length);
+            const joke = randomJokes[randomIndex];
+            const display = document.getElementById('random-joke-display');
+            
+            display.innerHTML = `
+                <div class="text-left">
+                    <p class="text-gray-800 dark:text-gray-200 font-medium mb-2">${joke.setup}</p>
+                    <p class="text-gray-600 dark:text-gray-300">${joke.punchline}</p>
+                </div>
+            `;
+            
+            createConfetti(this, 5);
+        });
+
+        // Quiz functionality
+        function startQuiz() {
+            quizActive = true;
+            currentQuestion = 0;
+            score = 0;
+            
+            // Blur the page except quiz section
+            document.body.classList.add('quiz-active');
+            document.querySelectorAll('body > *:not(#quiz):not(script)').forEach(element => {
+                element.classList.add('quiz-blur');
+            });
+            
+            document.getElementById('quiz-start').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = quizQuestions[currentQuestion];
+            
+            document.getElementById('question-counter').textContent = `Question ${currentQuestion + 1} of 8`;
+            document.getElementById('score-display').textContent = `Score: ${score}/8`;
+            document.getElementById('progress-bar').style.width = `${((currentQuestion + 1) / 8) * 100}%`;
+            document.getElementById('question-text').textContent = question.question;
+            
+            const answersContainer = document.getElementById('answers-container');
+            answersContainer.innerHTML = '';
+            
+            question.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full text-left p-4 bg-gray-100 dark:bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-500 rounded-lg transition-all active:scale-95 text-gray-800 dark:text-gray-200';
+                button.textContent = answer;
+                button.onclick = () => selectAnswer(index);
+                answersContainer.appendChild(button);
+            });
+        }
+
+        function showAnswerFeedback(isCorrect) {
+            const feedback = document.createElement('div');
+            feedback.className = `answer-feedback ${isCorrect ? 'answer-correct' : 'answer-incorrect'}`;
+            feedback.textContent = isCorrect ? '✓' : '✗';
+            
+            document.body.appendChild(feedback);
+            
+            // Remove the feedback element after animation
+            setTimeout(() => {
+                if (feedback.parentNode) {
+                    feedback.parentNode.removeChild(feedback);
+                }
+            }, 1200);
+        }
+
+        function selectAnswer(selectedIndex) {
+            const question = quizQuestions[currentQuestion];
+            const buttons = document.querySelectorAll('#answers-container button');
+            
+            // Disable all buttons
+            buttons.forEach(button => {
+                button.disabled = true;
+                button.classList.add('opacity-50');
+            });
+            
+            // Show correct/incorrect
+            if (selectedIndex === question.correct) {
+                buttons[selectedIndex].classList.add('bg-green-500', 'text-white');
+                createConfetti(buttons[selectedIndex]);
+                showAnswerFeedback(true);
+                score++;
+            } else {
+                buttons[selectedIndex].classList.add('bg-red-500', 'text-white');
+                buttons[question.correct].classList.add('bg-green-500', 'text-white');
+                showAnswerFeedback(false);
+            }
+            
+            // Move to next question after delay
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < quizQuestions.length) {
+                    showQuestion();
+                } else {
+                    showResults();
+                }
+            }, 1500);
+        }
+
+        function showResults() {
+            document.getElementById('question-container').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            
+            const percentage = (score / quizQuestions.length) * 100;
+            let emoji, title, message;
+            
+            if (percentage === 100) {
+                emoji = '🏆';
+                title = 'Perfect Score!';
+                message = 'Amazing! You know me really well! 🎉';
+                createBigConfetti();
+            } else if (percentage >= 80) {
+                emoji = '🌟';
+                title = 'Excellent!';
+                message = 'Great job! You really paid attention to my page!';
+            } else if (percentage >= 60) {
+                emoji = '👍';
+                title = 'Good Job!';
+                message = 'Not bad! You got most of the details right.';
+            } else {
+                emoji = '📚';
+                title = 'Keep Learning!';
+                message = 'Maybe read through my page again for the details!';
+            }
+            
+            document.getElementById('result-emoji').textContent = emoji;
+            document.getElementById('result-title').textContent = title;
+            document.getElementById('result-message').textContent = message;
+            document.getElementById('score-display').textContent = `Final Score: ${score}/8`;
+        }
+
+        function restartQuiz() {
+            // Remove blur effect
+            quizActive = false;
+            document.body.classList.remove('quiz-active');
+            document.querySelectorAll('.quiz-blur').forEach(element => {
+                element.classList.remove('quiz-blur');
+            });
+            
+            // Reset quiz UI
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('question-container').classList.remove('hidden');
+            document.getElementById('quiz-start').classList.remove('hidden');
+        }
+
+        // Fidget functionality
+        let clickCount = 0;
+        let spinCount = 0;
+        let stepperValue = 0;
+        let checkedBoxes = 0;
+        let pressureLevel = 0;
+        let pressureInterval;
+        let ledAnimating = false;
+
+        // Toggle Switch
+        document.getElementById('toggle-switch').addEventListener('click', function() {
+            const toggleBall = this.querySelector('.toggle-ball');
+            const status = document.getElementById('toggle-status');
+            
+            if (toggleBall.style.transform === 'translateX(32px)') {
+                toggleBall.style.transform = 'translateX(0px)';
+                this.classList.remove('bg-green-500');
+                this.classList.add('bg-gray-300', 'dark:bg-gray-600');
+                status.textContent = 'OFF';
+            } else {
+                toggleBall.style.transform = 'translateX(32px)';
+                this.classList.remove('bg-gray-300', 'dark:bg-gray-600');
+                this.classList.add('bg-green-500');
+                status.textContent = 'ON';
+            }
+        });
+
+        // Click Counter
+        document.getElementById('click-button').addEventListener('click', function() {
+            clickCount++;
+            this.textContent = clickCount;
+            document.getElementById('click-count').textContent = clickCount;
+            
+            // Special effects at certain click counts
+            if (clickCount === 10) {
+                createBigConfetti();
+                setTimeout(() => {
+                    showCustomAlert("Hey, you might crack through the website! 😅");
+                }, 500);
+            } else if (clickCount === 20) {
+                setTimeout(() => {
+                    showCustomAlert("Hey, you should stop! 😰");
+                }, 100);
+            } else if (clickCount === 30) {
+                setTimeout(() => {
+                    glitchWebsite();
+                }, 100);
+            }
+        });
+
+        // Volume Slider with chaos effect
+        let sliderChaosTriggered = false;
+        const volumeSlider = document.getElementById('volume-slider');
+        let isDragging = false;
+        let lastValue = 50;
+
+        volumeSlider.addEventListener('input', function() {
+            document.getElementById('volume-value').textContent = this.value;
+            lastValue = parseInt(this.value);
+        });
+
+        volumeSlider.addEventListener('mousedown', function() {
+            isDragging = true;
+        });
+
+        volumeSlider.addEventListener('mousemove', function(e) {
+            if (!isDragging || sliderChaosTriggered) return;
+            
+            const rect = this.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const sliderWidth = rect.width;
+            
+            // Check if mouse is way outside the slider bounds (more than 50px)
+            if (mouseX < -50 || mouseX > sliderWidth + 50) {
+                triggerSliderChaos();
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+        });
+
+        function triggerSliderChaos() {
+            if (sliderChaosTriggered) return;
+            sliderChaosTriggered = true;
+            
+            // Hide the original slider ball to make it look like it fell off
+            const originalSlider = volumeSlider;
+            originalSlider.style.setProperty('--thumb-opacity', '0');
+            
+            // Add CSS to hide the slider thumb
+            const hideThumbStyle = document.createElement('style');
+            hideThumbStyle.textContent = `
+                #volume-slider::-webkit-slider-thumb {
+                    opacity: 0 !important;
+                }
+                #volume-slider::-moz-range-thumb {
+                    opacity: 0 !important;
+                }
+            `;
+            document.head.appendChild(hideThumbStyle);
+            
+            // Create flying ball that looks exactly like the slider ball
+            const sliderRect = volumeSlider.getBoundingClientRect();
+            const sliderValue = parseInt(volumeSlider.value);
+            const thumbPosition = (sliderValue / 100) * (sliderRect.width - 20) + 10; // Calculate exact thumb position
+            
+            const flyingBall = document.createElement('div');
+            flyingBall.style.cssText = `
+                position: fixed;
+                width: 20px;
+                height: 20px;
+                background: white;
+                border: 2px solid #ccc;
+                border-radius: 50%;
+                z-index: 9998;
+                left: ${sliderRect.left + thumbPosition - 10}px;
+                top: ${sliderRect.top + sliderRect.height/2 - 10}px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                transition: none;
+                pointer-events: none;
+            `;
+            
+            document.body.appendChild(flyingBall);
+            
+            // Make slider go crooked
+            volumeSlider.style.transform = 'rotate(-15deg) skew(10deg)';
+            volumeSlider.style.transition = 'transform 0.5s ease-out';
+            volumeSlider.disabled = true;
+            volumeSlider.style.opacity = '0.7';
+            
+            // Animate flying ball bouncing around - start from exact thumb position
+            let ballX = sliderRect.left + thumbPosition - 10;
+            let ballY = sliderRect.top + sliderRect.height/2 - 10;
+            let velocityX = (Math.random() - 0.5) * 20 + 10; // Random horizontal velocity
+            let velocityY = (Math.random() - 0.5) * 20 - 5;  // Slight upward bias
+            let gravity = 0.8;
+            let bounce = 0.7;
+            
+            function animateBall() {
+                ballX += velocityX;
+                ballY += velocityY;
+                velocityY += gravity;
+                
+                // Bounce off walls
+                if (ballX <= 0 || ballX >= window.innerWidth - 20) {
+                    velocityX *= -bounce;
+                    ballX = Math.max(0, Math.min(window.innerWidth - 20, ballX));
+                }
+                
+                // Bounce off floor and ceiling
+                if (ballY <= 0 || ballY >= window.innerHeight - 20) {
+                    velocityY *= -bounce;
+                    ballY = Math.max(0, Math.min(window.innerHeight - 20, ballY));
+                }
+                
+                // Add some random chaos
+                velocityX += (Math.random() - 0.5) * 0.5;
+                velocityY += (Math.random() - 0.5) * 0.5;
+                
+                flyingBall.style.left = ballX + 'px';
+                flyingBall.style.top = ballY + 'px';
+                
+                // Continue animation for 5 seconds
+                if (Date.now() - chaosStartTime < 5000) {
+                    requestAnimationFrame(animateBall);
+                } else {
+                    // Clean up and trigger glitch
+                    flyingBall.remove();
+                    glitchWebsite();
+                }
+            }
+            
+            const chaosStartTime = Date.now();
+            animateBall();
+            
+            // Add some screen shake
+            document.body.style.animation = 'shake 0.5s ease-in-out infinite';
+            
+            // Add shake keyframes
+            const shakeStyle = document.createElement('style');
+            shakeStyle.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    25% { transform: translateX(-2px) rotate(0.5deg); }
+                    75% { transform: translateX(2px) rotate(-0.5deg); }
+                }
+            `;
+            document.head.appendChild(shakeStyle);
+            
+            // Stop shake after 2 seconds
+            setTimeout(() => {
+                document.body.style.animation = '';
+                shakeStyle.remove();
+            }, 2000);
+        }
+
+        // Spinner Dial
+        document.getElementById('spinner-dial').addEventListener('click', function() {
+            spinCount++;
+            const rotation = spinCount * 45;
+            this.style.transform = `rotate(${rotation}deg)`;
+            document.getElementById('spin-count').textContent = spinCount;
+        });
+
+        // Confetti Button
+        let confettiCount = 0;
+        document.getElementById('confetti-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            confettiCount++;
+            document.getElementById('confetti-count').textContent = `Celebrations: ${confettiCount}`;
+            
+            // Create confetti every single click
+            setTimeout(() => {
+                createConfetti(this, 8);
+            }, 10);
+            
+            // Create big confetti every single click too
+            setTimeout(() => {
+                createBigConfetti();
+            }, 50);
+        });
+
+        // Checkbox Grid
+        document.querySelectorAll('.checkbox-item').forEach(checkbox => {
+            checkbox.addEventListener('click', function() {
+                if (this.classList.contains('dynamic-primary')) {
+                    this.classList.remove('dynamic-primary');
+                    checkedBoxes--;
+                } else {
+                    this.classList.add('dynamic-primary');
+                    checkedBoxes++;
+                }
+                document.getElementById('checked-count').textContent = checkedBoxes;
+            });
+        });
+
+        // Pressure Button
+        document.getElementById('pressure-button').addEventListener('mousedown', function() {
+            pressureInterval = setInterval(() => {
+                pressureLevel = Math.min(pressureLevel + 2, 100);
+                document.getElementById('pressure-bar').style.width = pressureLevel + '%';
+            }, 50);
+        });
+
+        document.getElementById('pressure-button').addEventListener('mouseup', function() {
+            clearInterval(pressureInterval);
+            setTimeout(() => {
+                pressureLevel = Math.max(pressureLevel - 5, 0);
+                document.getElementById('pressure-bar').style.width = pressureLevel + '%';
+                if (pressureLevel > 0) {
+                    setTimeout(arguments.callee, 100);
+                }
+            }, 100);
+        });
+
+        document.getElementById('pressure-button').addEventListener('mouseleave', function() {
+            clearInterval(pressureInterval);
+        });
+
+        // Number Stepper
+        document.getElementById('stepper-minus').addEventListener('click', function() {
+            stepperValue--;
+            document.getElementById('stepper-value').textContent = stepperValue;
+            document.getElementById('stepper-display').textContent = stepperValue;
+        });
+
+        document.getElementById('stepper-plus').addEventListener('click', function() {
+            stepperValue++;
+            document.getElementById('stepper-value').textContent = stepperValue;
+            document.getElementById('stepper-display').textContent = stepperValue;
+        });
+
+        // LED Strip Animation
+        document.getElementById('led-button').addEventListener('click', function() {
+            if (ledAnimating) return;
+            
+            ledAnimating = true;
+            const leds = document.querySelectorAll('.led');
+            const colors = ['#ff914d', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+            
+            let currentLed = 0;
+            const animateNext = () => {
+                if (currentLed < leds.length) {
+                    const color = colors[currentLed % colors.length];
+                    leds[currentLed].style.backgroundColor = color;
+                    leds[currentLed].style.boxShadow = `0 0 10px ${color}`;
+                    currentLed++;
+                    setTimeout(animateNext, 200);
+                } else {
+                    setTimeout(() => {
+                        leds.forEach(led => {
+                            led.style.backgroundColor = '';
+                            led.style.boxShadow = '';
+                        });
+                        ledAnimating = false;
+                    }, 1000);
+                }
+            };
+            animateNext();
+        });
+
+        // Search functionality
+        const searchableContent = [
+            { section: 'About', content: 'Lachlan Thurlow 13 year old boy technology dad jokes horrible', id: 'about' },
+            { section: 'Education', content: 'Pittwater House Year 8 Music French Digital Tech Band Water Polo Chess', id: 'school' },
+            { section: 'Interests', content: 'Technology smart home devices travel gaming adventures', id: 'interests' },
+            { section: 'Hobbies', content: 'Music euphonium piano Water Polo team competitive', id: 'hobbies' },
+            { section: 'Achievements', content: 'Service CPPS Thurlow Award French Award Year 7 36 Heroic Award Badge Bronze', id: 'achievements' },
+            { section: 'Transnology', content: 'company side hustle t-shirts merchandise design fulfillment business creative', id: 'company' },
+            { section: 'Projects', content: 'Hot Chocolate Rankings OuiBit French learning Home homepage', id: 'projects' },
+            { section: 'Fidgets', content: 'toggle switch click counter slider spinner dial color picker checkbox grid pressure button number stepper LED strip', id: 'fidgets' },
+            { section: 'Jokes', content: 'dad jokes knock knock tech jokes food jokes animal jokes random jokes generator', id: 'jokes' },
+            { section: 'Easter Eggs', content: 'hidden secrets click clicker glitch slider bonjour croissant pizza mario luigi dvd screensaver', id: 'easter-eggs' },
+            { section: 'Quiz', content: 'test knowledge questions challenge quiz brain', id: 'quiz' }
+        ];
+
+        function openSearch() {
+            const overlay = document.getElementById('search-overlay');
+            const searchInput = document.getElementById('search-input');
+            const searchTips = document.getElementById('search-tips');
+            const searchIcon = document.getElementById('search-icon');
+            const closeIcon = document.getElementById('close-icon');
+            const shortcut = document.getElementById('search-toggle-shortcut');
+            
+            overlay.classList.remove('hidden');
+            searchTips.classList.remove('hidden');
+            document.getElementById('search-results').classList.add('hidden');
+            
+            // Switch to close button
+            searchIcon.classList.add('hidden');
+            closeIcon.classList.remove('hidden');
+            if (!isMobile) {
+                shortcut.textContent = 'ESC';
+            }
+            
+            // Focus the input after animation
+            setTimeout(() => {
+                searchInput.focus();
+            }, 100);
+        }
+
+        function closeSearch() {
+            const overlay = document.getElementById('search-overlay');
+            const searchIcon = document.getElementById('search-icon');
+            const closeIcon = document.getElementById('close-icon');
+            const shortcut = document.getElementById('search-toggle-shortcut');
+            
+            overlay.classList.add('hidden');
+            clearSearch();
+            
+            // Switch back to search button
+            searchIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+            if (!isMobile) {
+                shortcut.textContent = isMac ? '⌘K' : 'Ctrl+K';
+            }
+        }
+
+        function performSearch(query) {
+            const searchTips = document.getElementById('search-tips');
+            
+            if (!query.trim()) {
+                document.getElementById('search-results').classList.add('hidden');
+                searchTips.classList.remove('hidden');
+                return;
+            }
+
+            // Check for pizza easter egg first (before any other processing)
+            const lowerQuery = query.toLowerCase();
+            if (lowerQuery.includes('pizza') || lowerQuery.includes('mario') || lowerQuery.includes('luigi')) {
+                showPizzaAnimation();
+                return;
+            }
+
+            searchTips.classList.add('hidden');
+            const results = searchableContent.filter(item => 
+                item.content.toLowerCase().includes(query.toLowerCase()) ||
+                item.section.toLowerCase().includes(query.toLowerCase())
+            );
+
+            displaySearchResults(results, query);
+        }
+
+        function displaySearchResults(results, query) {
+            const resultsContainer = document.getElementById('search-results');
+            
+            // Special animation for "bonjour"
+            if (query.toLowerCase().includes('bonjour')) {
+                showCroissantAnimation();
+                return;
+            }
+            
+            // Special DVD screensaver for "dvd"
+            if (query.toLowerCase().includes('dvd')) {
+                showDVDScreensaver();
+                return;
+            }
+            
+            // Special "that's what she said" easter egg
+            if (query.toLowerCase().includes("that's what she said") || query.toLowerCase().includes("thats what she said")) {
+                showThatsWhatSheSaidEasterEgg();
+                return;
+            }
+            
+            // Check if the query is a greeting
+            const greetings = ['hello', 'hi', 'hey', 'howdy', 'greetings', 'good morning', 'good afternoon', 'good evening'];
+            const isGreeting = greetings.some(greeting => query.toLowerCase().includes(greeting.toLowerCase()));
+            
+            if (results.length === 0) {
+                let message;
+                if (isGreeting) {
+                    message = `${query.charAt(0).toUpperCase() + query.slice(1)} to you too! We couldn't find anything for your nice words, though.`;
+                } else {
+                    message = `We looked everywhere (even through Lachie's room) but couldn't find anything with "${query}"!`;
+                }
+                
+                resultsContainer.innerHTML = `
+                    <div class="p-6 text-center text-gray-500 dark:text-gray-400">
+                        <div class="text-4xl mb-2">🔍</div>
+                        <div>${message}</div>
+                        <div class="text-sm mt-2">But seriously, DON'T search "bonjour" or "pizza"!</div>
+                    </div>
+                `;
+            } else {
+                let headerMessage = "Here are your results";
+                if (isGreeting) {
+                    headerMessage = `${query.charAt(0).toUpperCase() + query.slice(1)} to you too! Here are your results`;
+                }
+                
+                resultsContainer.innerHTML = `
+                    <div class="p-4 border-b border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                        <div class="text-sm text-gray-600 dark:text-gray-400">${headerMessage}</div>
+                    </div>
+                ` + results.map(result => `
+                    <div class="search-result-item p-4 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer border-b border-gray-200 dark:border-gray-600 last:border-b-0 transition-all active:scale-95" data-section="${result.id}">
+                        <div class="font-medium text-gray-800 dark:text-gray-200 mb-1">${result.section}</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">${highlightMatch(result.content, query)}</div>
+                    </div>
+                `).join('');
+
+                // Add click listeners to results
+                document.querySelectorAll('.search-result-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const sectionId = this.dataset.section;
+                        const section = document.getElementById(sectionId);
+                        if (section) {
+                            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            closeSearch();
+                        }
+                    });
+                });
+            }
+            
+            resultsContainer.classList.remove('hidden');
+        }
+
+        function highlightMatch(text, query) {
+            const words = text.split(' ').slice(0, 15); // Limit to first 15 words
+            const regex = new RegExp(`(${query})`, 'gi');
+            return words.join(' ').replace(regex, '<mark class="bg-yellow-200 dark:bg-yellow-600 px-1 rounded">$1</mark>') + '...';
+        }
+
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-results').classList.add('hidden');
+            document.getElementById('clear-search').classList.add('hidden');
+            document.getElementById('search-tips').classList.remove('hidden');
+        }
+
+        // Detect OS and device type for keyboard shortcut display
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (!isMobile) {
+            const shortcutText = isMac ? '⌘K' : 'Ctrl+K';
+            const shortcutElement = document.getElementById('search-toggle-shortcut');
+            if (shortcutElement) {
+                shortcutElement.textContent = shortcutText;
+            }
+        }
+
+        // Search event listeners
+        const searchInput = document.getElementById('search-input');
+        const clearButton = document.getElementById('clear-search');
+        const searchToggle = document.getElementById('search-toggle');
+        const searchOverlay = document.getElementById('search-overlay');
+
+        // Open search with button click
+        searchToggle.addEventListener('click', function() {
+            if (searchOverlay.classList.contains('hidden')) {
+                openSearch();
+            } else {
+                closeSearch();
+            }
+        });
+
+        // Close search with overlay click
+        searchOverlay.addEventListener('click', function(e) {
+            if (e.target === searchOverlay) {
+                closeSearch();
+            }
+        });
+
+        // Keyboard shortcuts (desktop only)
+        if (!isMobile) {
+            document.addEventListener('keydown', function(e) {
+                // Open search with Ctrl+K or Cmd+K
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    openSearch();
+                }
+                
+                // Close search with Escape
+                if (e.key === 'Escape' && !searchOverlay.classList.contains('hidden')) {
+                    closeSearch();
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value;
+            if (query.length > 0) {
+                clearButton.classList.remove('hidden');
+                performSearch(query);
+            } else {
+                clearButton.classList.add('hidden');
+                document.getElementById('search-results').classList.add('hidden');
+                document.getElementById('search-tips').classList.remove('hidden');
+            }
+        });
+
+        // Handle Enter key in search input
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const query = this.value.trim();
+                if (query) {
+                    performSearch(query);
+                }
+            }
+        });
+
+        clearButton.addEventListener('click', clearSearch);
+
+        // Event listeners
+        document.getElementById('start-quiz-btn').addEventListener('click', startQuiz);
+        document.getElementById('restart-quiz-btn').addEventListener('click', restartQuiz);
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add active state to navigation
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('dynamic-primary-text');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('dynamic-primary-text');
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97923245c3bc440b',t:'MTc1Njg3MDUxOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
